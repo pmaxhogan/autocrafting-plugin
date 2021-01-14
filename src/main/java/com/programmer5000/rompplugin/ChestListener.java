@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Chest;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -88,7 +89,7 @@ public class ChestListener implements Listener {
   }
 
   private boolean checkInventoryIsSpecialChest(Inventory inventory){
-      return inventory.getType() == InventoryType.CHEST && ((Chest) inventory.getHolder()).getBlock().getType() == Material.TRAPPED_CHEST;
+      return inventory.getType() == InventoryType.CHEST && !(inventory instanceof DoubleChest) && ((Chest) inventory.getHolder()).getBlock().getType() == Material.TRAPPED_CHEST;
   }
 
 
