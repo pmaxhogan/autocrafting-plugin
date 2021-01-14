@@ -89,7 +89,11 @@ public class ChestListener implements Listener {
   }
 
   private boolean checkInventoryIsSpecialChest(Inventory inventory){
+    try {
       return inventory.getType() == InventoryType.CHEST && !(inventory instanceof DoubleChest) && ((Chest) inventory.getHolder()).getBlock().getType() == Material.TRAPPED_CHEST;
+    }catch(java.lang.ClassCastException ignored){
+      return false;
+    }
   }
 
 
