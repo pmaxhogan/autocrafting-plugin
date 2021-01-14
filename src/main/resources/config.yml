@@ -1,0 +1,2 @@
+# set this to true to allow hoppers to pull recipe templates out of a chest
+enableRecipeEmpty: true
