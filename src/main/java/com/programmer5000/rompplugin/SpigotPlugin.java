@@ -1,6 +1,7 @@
 package com.programmer5000.rompplugin;
 
 import org.bukkit.Bukkit;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -82,13 +83,15 @@ public class SpigotPlugin extends JavaPlugin {
                 shapelessRecipeMap.put(shapelessRecipe.getIngredientList(), shapelessRecipe);
             }
         }
+
         Bukkit.getLogger().info("calculated recipe maps!");
 
         // Don't log enabling, Spigot does that for you automatically!
 
         // Commands enabled with following method must have entries in plugin.yml
-        getCommand("example").setExecutor(new ExampleCommand(this));
+//        getCommand("example").setExecutor(new ExampleCommand(this));
 
         getServer().getPluginManager().registerEvents(new ChestListener(), this);
+        getServer().getPluginManager().registerEvents(new MotdListener(), this);
     }
 }

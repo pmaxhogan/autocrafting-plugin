@@ -12,10 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.*;
-import org.bukkit.util.permissions.BroadcastPermissions;
-import sun.awt.SunToolkit;
 
 class RecipeShape {
   private ItemStack[] items;
