@@ -154,6 +154,8 @@ public class ChestListener implements Listener {
       if(!checkInventoryIsSpecialChest(sourceInventory)) return;
 
       ItemStack[] stack = new ItemStack[9];
+      ArrayList<ItemStack> stackList = new ArrayList<ItemStack>();
+
       int pos = 0;
       for(int i : allRows){
         ItemStack thisItem = sourceInventory.getItem(i);
@@ -170,6 +172,7 @@ public class ChestListener implements Listener {
 
           thisItem.setAmount(1);
           stack[pos] = thisItem;
+          stackList.add(thisItem);
         }else {
           stack[pos] = null;
         }
@@ -179,7 +182,7 @@ public class ChestListener implements Listener {
 
       RecipeShape shape = new RecipeShape(stack);
       ShapedRecipe shapedCrafted = SpigotPlugin.getInstance().getShapedRecipeMap().get(shape);
-      ShapelessRecipe shapelessCrafted = SpigotPlugin.getInstance().getShapelessRecipeMap().get(Arrays.asList(stack));
+      ShapelessRecipe shapelessCrafted = SpigotPlugin.getInstance().getShapelessRecipeMap().get(stackList);
 
       ItemStack outItem = null;
       if(shapelessCrafted != null) outItem = shapelessCrafted.getResult();
