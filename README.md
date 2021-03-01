@@ -1,2 +1,2 @@
-# Romp Autocrafting Plugin
-Trapped chests are autocrafters
+# Autocrafting Plugin
+Trapped chests are autocrafters, also randomizes MOTD
