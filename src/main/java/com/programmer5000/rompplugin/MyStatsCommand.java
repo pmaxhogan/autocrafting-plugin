@@ -35,8 +35,8 @@ public class MyStatsCommand implements CommandExecutor {
         return true;
       }
 
-      Statistic stat = Statistic.MINE_BLOCK;
-      Object statEntityOrMaterialOrNull = Material.DIRT;
+      Statistic stat = Statistic.ENTITY_KILLED_BY;
+      Object statEntityOrMaterialOrNull = EntityType.ZOMBIE;
 
       StatsBoard statsBoard = StatsBoardManager.getInstance().getBoard(stat, statEntityOrMaterialOrNull);
       statsBoard.addPlayer(player);

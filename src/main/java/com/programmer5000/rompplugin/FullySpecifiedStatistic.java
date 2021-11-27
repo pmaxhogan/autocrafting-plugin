@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Statistic;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
@@ -50,8 +51,8 @@ public class FullySpecifiedStatistic {
     USE_ITEM("Used"),
     BREAK_ITEM("Broke"),
     CRAFT_ITEM("Crafted"),
-    KILL_ENTITY("Killed"),
-    ENTITY_KILLED_BY("Killed by"),
+    KILL_ENTITY("Times Killed"),
+    ENTITY_KILLED_BY("Times Killed by"),
     TIME_SINCE_DEATH("Time Since Death"),
     TALKED_TO_VILLAGER("Villagers Talked To"),
     TRADED_WITH_VILLAGER("Villager Trades"),
@@ -185,7 +186,11 @@ public class FullySpecifiedStatistic {
 
 
         return keyToString(mat.getKey().getKey()) + " " + thisStatisticName;
-      }else{
+      }else if (statEntityOrMaterialOrNull instanceof EntityType) {
+        EntityType type = (EntityType) statEntityOrMaterialOrNull;
+
+        return thisStatisticName + " " + keyToString(type.getKey().getKey());
+      } else {
         return thisStatisticName + " " + statEntityOrMaterialOrNull;
       }
     }

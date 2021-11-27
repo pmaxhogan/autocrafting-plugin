@@ -8,6 +8,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
+import java.util.Random;
 import java.util.logging.Logger;
 
 public class StatsBoard {
@@ -27,11 +28,13 @@ public class StatsBoard {
 
     Logger logger = Bukkit.getLogger();
 
-    String objectiveKey = trackedStatistic.toString();
-
-    if(statEntityOrMaterialOrNull != null){
-      objectiveKey += "_" + statEntityOrMaterialOrNull.toString();
-    }
+    Random rand = new Random();
+    String objectiveKey = String.valueOf(rand.nextInt(Integer.MAX_VALUE));
+//    String objectiveKey = trackedStatistic.toString();
+//
+//    if(statEntityOrMaterialOrNull != null){
+//      objectiveKey += "_" + statEntityOrMaterialOrNull.toString();
+//    }
 
     String objectiveName = getObjectiveName();
     logger.info("Creating new board & registering new objective with key " + objectiveKey + " and name " + objectiveName);
@@ -41,7 +44,6 @@ public class StatsBoard {
 
   public void updateScoresForAllPlayers() {
     OfflinePlayer[] allPlayers = Bukkit.getOfflinePlayers();
-    Bukkit.getLogger().info("Found players " + allPlayers.length);
 
     for (OfflinePlayer pastPlayer : allPlayers) {
       int scoreValue;
@@ -61,7 +63,6 @@ public class StatsBoard {
       scoreValue /= this.fullStat.getDivisionFactor();
 
       Score score = objective.getScore(name);
-      Bukkit.getLogger().info("isScoreSet " + score.isScoreSet() + " value " + scoreValue + " " + name);
       if(score.isScoreSet() || scoreValue > 0){
         score.setScore(scoreValue);
       }
