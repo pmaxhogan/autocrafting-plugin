@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Creature;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.EntityType;
 
 import java.util.*;
@@ -24,7 +24,7 @@ public class StatsBoardManager {
         case ENTITY:// kill, killed by
           for(EntityType type : EntityType.values()){
             Class<?> eClass = (Class<?>) type.getEntityClass();
-            if(eClass != null && Creature.class.isAssignableFrom(eClass)){
+            if(eClass != null && Creature.class.isAssignableFrom(eClass) || eClass == Player.class){
               FullySpecifiedStatistic fullStat = new FullySpecifiedStatistic(stat, type);
               logger.info("Added entity " + fullStat.getNiceObjectiveName());
               allPossibleStatistics.add(fullStat);
