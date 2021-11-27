@@ -86,9 +86,16 @@ public class SpigotPlugin extends JavaPlugin {
         // Don't log enabling, Spigot does that for you automatically!
 
         // Commands enabled with following method must have entries in plugin.yml
-//        getCommand("example").setExecutor(new ExampleCommand(this));
+        getCommand("example").setExecutor(new MyStatsCommand());
 
         getServer().getPluginManager().registerEvents(new ChestListener(), this);
         getServer().getPluginManager().registerEvents(new MotdListener(), this);
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+            @Override
+            public void run() {
+                StatsBoardManager.getInstance().updateAll();
+            }
+        }, 0, 20);// run once a second (every 20 ticks)
     }
 }
