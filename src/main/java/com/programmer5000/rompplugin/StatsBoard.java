@@ -76,10 +76,10 @@ public class StatsBoard {
       }else{
         switch(this.customStatistic){
           case KDR:
-            int timesKilled = 0;
+            int timesKilled = pastPlayer.getStatistic(Statistic.PLAYER_KILLS);
             for(EntityType type : EntityType.values()) {
               Class<?> eClass = (Class<?>) type.getEntityClass();
-              if (eClass != null && Creature.class.isAssignableFrom(eClass) || eClass == Player.class) {
+              if (eClass != null && Creature.class.isAssignableFrom(eClass)) {
                 timesKilled += pastPlayer.getStatistic(Statistic.KILL_ENTITY, type);
               }
             }
@@ -89,10 +89,10 @@ public class StatsBoard {
             scoreValue = (timesKilled * 100) / timesDied;
             break;
           case PLAYER_KDR:
-            int timesKilledPlayer2 = pastPlayer.getStatistic(Statistic.PLAYER_KILLS);
+            int timesKilledPlayer = pastPlayer.getStatistic(Statistic.PLAYER_KILLS);
             int timesKilledByPlayer = pastPlayer.getStatistic(Statistic.ENTITY_KILLED_BY, EntityType.PLAYER) + 1;
 
-            scoreValue = (timesKilledPlayer2 * 100) / timesKilledByPlayer;
+            scoreValue = (timesKilledPlayer * 100) / timesKilledByPlayer;
 
             break;
         }
