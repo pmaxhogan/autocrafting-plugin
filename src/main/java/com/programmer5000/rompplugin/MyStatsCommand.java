@@ -24,10 +24,12 @@ public class MyStatsCommand implements CommandExecutor {
         return true;
       }
 
-      Statistic stat = Statistic.ENTITY_KILLED_BY;
-      Object statEntityOrMaterialOrNull = EntityType.ZOMBIE;
+//      Statistic stat = Statistic.ENTITY_KILLED_BY;
+//      Object statEntityOrMaterialOrNull = EntityType.ZOMBIE;
+//
+//      StatsBoard statsBoard = StatsBoardManager.getInstance().getBoard(stat, statEntityOrMaterialOrNull);
 
-      StatsBoard statsBoard = StatsBoardManager.getInstance().getBoard(stat, statEntityOrMaterialOrNull);
+      StatsBoard statsBoard = StatsBoardManager.getInstance().getBoard("Times Killed by Zombie");
       statsBoard.addPlayer(player);
 
 

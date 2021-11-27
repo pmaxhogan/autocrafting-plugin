@@ -69,6 +69,20 @@ public class StatsBoardManager {
     }
   }
 
+  public StatsBoard getBoard(String board){
+    FullySpecifiedStatistic fullStat = null;
+    for(FullySpecifiedStatistic thisFullStat : allPossibleStatistics){
+      if(thisFullStat.getNiceObjectiveName().equals(board)){
+        fullStat = thisFullStat;
+        break;
+      }
+    }
+
+    if(fullStat == null) return null;
+
+    return getBoard(fullStat.trackedStatistic, fullStat.statEntityOrMaterialOrNull);
+  }
+
   public StatsBoard getBoard(Statistic trackedStatistic, Object statEntityOrMaterialOrNull) {
     FullySpecifiedStatistic stat = new FullySpecifiedStatistic(trackedStatistic, statEntityOrMaterialOrNull);
     if(boardMap.containsKey(stat)){
