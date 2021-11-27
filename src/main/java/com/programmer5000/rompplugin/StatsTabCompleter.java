@@ -23,6 +23,7 @@ public class StatsTabCompleter implements TabCompleter {
     paramaterizedDisplayTypes.add("Used:");
     paramaterizedDisplayTypes.add("Killed:");
     paramaterizedDisplayTypes.add("Killed by:");
+    paramaterizedDisplayTypes.add("Opened:");
 
     Logger logger = Bukkit.getLogger();
 
