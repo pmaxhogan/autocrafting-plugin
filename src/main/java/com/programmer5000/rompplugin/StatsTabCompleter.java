@@ -30,14 +30,16 @@ public class StatsTabCompleter implements TabCompleter {
     if (args.length > 1 && Objects.equals(args[0], "display")) {
       String fragment = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-      List<String> results = StatsBoardManager.getInstance().getPossibleStartingWith(fragment).stream().filter(str -> fragment.contains(":") || !str.contains(":")).map(str -> {
-        String[] split = str.split(" ");
-        return String.join(" ", Arrays.copyOfRange(split, args.length - 2, split.length));
-      }).collect(Collectors.toList());
+      List<String> results = new ArrayList<String>();
 
       if(!fragment.contains(":")) {
-        results.addAll(paramaterizedDisplayTypes);
+        results.addAll(paramaterizedDisplayTypes.stream().filter(str -> str.startsWith(fragment)).collect(Collectors.toList()));
       }
+
+      results.addAll(StatsBoardManager.getInstance().getPossibleStartingWith(fragment).stream().filter(str -> fragment.contains(":") || !str.contains(":")).map(str -> {
+        String[] split = str.split(" ");
+        return String.join(" ", Arrays.copyOfRange(split, args.length - 2, split.length));
+      }).collect(Collectors.toList()));
 
       return results;
     } else if (args.length == 1) {

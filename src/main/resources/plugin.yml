@@ -9,8 +9,8 @@ api-version: 1.17
 main: ${mainClass}
 
 commands:
-    example:
-        description: An example command
-        usage: /<command>
+    sidebar:
+        description: Sets which field displays on your sidebar
+        usage: /<command> {clear|display} <Name of board to display>
 
 permissions: {}

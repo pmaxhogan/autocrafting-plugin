@@ -86,8 +86,8 @@ public class SpigotPlugin extends JavaPlugin {
         // Don't log enabling, Spigot does that for you automatically!
 
         // Commands enabled with following method must have entries in plugin.yml
-        getCommand("example").setExecutor(new MyStatsCommand());
-        getCommand("example").setTabCompleter(new StatsTabCompleter());
+        getCommand("sidebar").setExecutor(new MyStatsCommand());
+        getCommand("sidebar").setTabCompleter(new StatsTabCompleter());
 
         getServer().getPluginManager().registerEvents(new ChestListener(), this);
         getServer().getPluginManager().registerEvents(new MotdListener(), this);

@@ -10,7 +10,7 @@
     <!-- Name, Description, and URL are used in plugin.yml -->
     <name>rompplugin</name>
     <description>Romp Plugin</description>
-    <url>http://example.com</url>
+<!--    <url>http://example.com</url>-->
 
     <licenses>
         <license>
