@@ -69,6 +69,16 @@ public class StatsBoardManager {
     }
   }
 
+  public List<String> getPossibleStartingWith(String fragment){
+    List returnVal = new ArrayList<String>();
+    for(FullySpecifiedStatistic thisFullStat : allPossibleStatistics) {
+      if(thisFullStat.getNiceObjectiveName().startsWith(fragment)){
+        returnVal.add(thisFullStat.getNiceObjectiveName());
+      }
+    }
+    return returnVal;
+  }
+
   public StatsBoard getBoard(String board){
     FullySpecifiedStatistic fullStat = null;
     for(FullySpecifiedStatistic thisFullStat : allPossibleStatistics){

@@ -30,7 +30,9 @@ public class FullySpecifiedStatistic {
     DROP_COUNT("Items Dropped"),
     DROP("Dropped"),
     PICKUP("Picked Up"),
-    PLAY_ONE_MINUTE("Time Played"),
+    PLAY_ONE_MINUTE("Minutes Played", 20 * 60),
+    TIME_SINCE_DEATH("Minutes Since Last Death", 20 * 60),
+    TIME_SINCE_REST("Minutes Since Last Rest", 20 * 60),
     WALK_ONE_CM("Distance Walked", 100),
     WALK_ON_WATER_ONE_CM("Distance Walked Through Water", 100),
     FALL_ONE_CM("Distance Fallen", 100),
@@ -51,9 +53,8 @@ public class FullySpecifiedStatistic {
     USE_ITEM("Used"),
     BREAK_ITEM("Broke"),
     CRAFT_ITEM("Crafted"),
-    KILL_ENTITY("Times Killed"),
-    ENTITY_KILLED_BY("Times Killed by"),
-    TIME_SINCE_DEATH("Time Since Death"),
+    KILL_ENTITY("Killed"),
+    ENTITY_KILLED_BY("Killed by"),
     TALKED_TO_VILLAGER("Villagers Talked To"),
     TRADED_WITH_VILLAGER("Villager Trades"),
     CAKE_SLICES_EATEN,
@@ -80,7 +81,6 @@ public class FullySpecifiedStatistic {
     CHEST_OPENED("Chests Opened"),
     SLEEP_IN_BED("Times Slept"),
     SHULKER_BOX_OPENED("Boxes Opened"),
-    TIME_SINCE_REST(1),
     DAMAGE_DEALT_ABSORBED("Dealt Damage Absorbed", 10),
     DAMAGE_DEALT_RESISTED("Dealt Damage Resisted", 10),
     DAMAGE_BLOCKED_BY_SHIELD("Damage Blocked by Shield", 10),
@@ -185,11 +185,11 @@ public class FullySpecifiedStatistic {
         Material mat = (Material) statEntityOrMaterialOrNull;
 
 
-        return keyToString(mat.getKey().getKey()) + " " + thisStatisticName;
+        return thisStatisticName + ": " + keyToString(mat.getKey().getKey());
       }else if (statEntityOrMaterialOrNull instanceof EntityType) {
         EntityType type = (EntityType) statEntityOrMaterialOrNull;
 
-        return thisStatisticName + " " + keyToString(type.getKey().getKey());
+        return thisStatisticName + ": " + keyToString(type.getKey().getKey());
       } else {
         return thisStatisticName + " " + statEntityOrMaterialOrNull;
       }
