@@ -20,8 +20,6 @@ public class FullySpecifiedStatistic {
 
   @SuppressWarnings("unused")
   enum StatisticsToNames {
-    DAMAGE_DEALT,
-    DAMAGE_TAKEN,
     DEATHS,
     MOB_KILLS,
     PLAYER_KILLS,
@@ -83,6 +81,8 @@ public class FullySpecifiedStatistic {
     CHEST_OPENED("Interacted: Chests"),
     SLEEP_IN_BED("Times Slept"),
     SHULKER_BOX_OPENED("Interacted: Boxes"),
+    DAMAGE_DEALT(10),
+    DAMAGE_TAKEN(10),
     DAMAGE_DEALT_ABSORBED("Dealt Damage Absorbed", 10),
     DAMAGE_DEALT_RESISTED("Dealt Damage Resisted", 10),
     DAMAGE_BLOCKED_BY_SHIELD("Damage Blocked by Shield", 10),
