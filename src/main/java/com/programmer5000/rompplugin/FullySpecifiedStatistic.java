@@ -184,7 +184,7 @@ public class FullySpecifiedStatistic {
         Material mat = (Material) statEntityOrMaterialOrNull;
 
 
-        return thisStatisticName + " " + keyToString(mat.getKey().getKey());
+        return keyToString(mat.getKey().getKey()) + " " + thisStatisticName;
       }else{
         return thisStatisticName + " " + statEntityOrMaterialOrNull;
       }

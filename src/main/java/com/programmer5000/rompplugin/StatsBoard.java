@@ -41,6 +41,7 @@ public class StatsBoard {
 
   public void updateScoresForAllPlayers() {
     OfflinePlayer[] allPlayers = Bukkit.getOfflinePlayers();
+    Bukkit.getLogger().info("Found players " + allPlayers.length);
 
     for (OfflinePlayer pastPlayer : allPlayers) {
       int scoreValue;
@@ -60,7 +61,10 @@ public class StatsBoard {
       scoreValue /= this.fullStat.getDivisionFactor();
 
       Score score = objective.getScore(name);
-      score.setScore(scoreValue);
+      Bukkit.getLogger().info("isScoreSet " + score.isScoreSet() + " value " + scoreValue + " " + name);
+      if(score.isScoreSet() || scoreValue > 0){
+        score.setScore(scoreValue);
+      }
     }
   }
 

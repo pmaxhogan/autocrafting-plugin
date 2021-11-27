@@ -35,8 +35,8 @@ public class MyStatsCommand implements CommandExecutor {
         return true;
       }
 
-      Statistic stat = Statistic.WALK_ONE_CM;
-      Object statEntityOrMaterialOrNull = null;
+      Statistic stat = Statistic.MINE_BLOCK;
+      Object statEntityOrMaterialOrNull = Material.DIRT;
 
       StatsBoard statsBoard = StatsBoardManager.getInstance().getBoard(stat, statEntityOrMaterialOrNull);
       statsBoard.addPlayer(player);
