@@ -61,8 +61,9 @@ public class StatsBoardManager {
     logger.info("Loaded " + allPossibleStatistics.size() + " possible statistics");
   }
 
-  public Collection<StatsBoard> getAllBoards(){
-    Collection<StatsBoard> values = boardMap.values();
+  public ArrayList<StatsBoard> getAllBoards(){
+    ArrayList<StatsBoard> values = new ArrayList<StatsBoard>();
+    values.addAll(boardMap.values());
     values.addAll(boardMap2.values());
     return values;
   }
@@ -86,7 +87,7 @@ public class StatsBoardManager {
     }
 
     for(FullySpecifiedStatistic.CustomStatistic stat :FullySpecifiedStatistic.CustomStatistic.values()){
-      returnVal.add(stat.name());
+      returnVal.add(stat.getName());
     }
     return returnVal;
   }
@@ -102,7 +103,7 @@ public class StatsBoardManager {
 
     if(fullStat == null){
       for(FullySpecifiedStatistic.CustomStatistic stat :FullySpecifiedStatistic.CustomStatistic.values()){
-        if(stat.name().equalsIgnoreCase(board)){
+        if(stat.getName().equalsIgnoreCase(board)){
           return getBoard(stat);
         }
       }

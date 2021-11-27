@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
@@ -36,6 +37,7 @@ public class StatsBoard {
     this.board = manager.getNewScoreboard();
     this.customStatistic = customStatistic;
     this.statEntityOrMaterialOrNull = null;
+    this.fullStat = new FullySpecifiedStatistic(customStatistic);
 
     init();
   }
@@ -61,7 +63,7 @@ public class StatsBoard {
     OfflinePlayer[] allPlayers = Bukkit.getOfflinePlayers();
 
     for (OfflinePlayer pastPlayer : allPlayers) {
-      int scoreValue;
+      int scoreValue = 0;
 
       if(this.trackedStatistic != null) {
         if (this.statEntityOrMaterialOrNull instanceof Material) {
@@ -72,7 +74,28 @@ public class StatsBoard {
           scoreValue = pastPlayer.getStatistic(this.trackedStatistic);
         }
       }else{
-        scoreValue = 666;
+        switch(this.customStatistic){
+          case KDR:
+            int timesKilled = 0;
+            for(EntityType type : EntityType.values()) {
+              Class<?> eClass = (Class<?>) type.getEntityClass();
+              if (eClass != null && Creature.class.isAssignableFrom(eClass) || eClass == Player.class) {
+                timesKilled += pastPlayer.getStatistic(Statistic.KILL_ENTITY, type);
+              }
+            }
+
+            int timesDied = pastPlayer.getStatistic(Statistic.DEATHS) + 1;
+
+            scoreValue = (timesKilled * 100) / timesDied;
+            break;
+          case PLAYER_KDR:
+            int timesKilledPlayer2 = pastPlayer.getStatistic(Statistic.PLAYER_KILLS);
+            int timesKilledByPlayer = pastPlayer.getStatistic(Statistic.ENTITY_KILLED_BY, EntityType.PLAYER) + 1;
+
+            scoreValue = (timesKilledPlayer2 * 100) / timesKilledByPlayer;
+
+            break;
+        }
       }
 
       String name = pastPlayer.getName();

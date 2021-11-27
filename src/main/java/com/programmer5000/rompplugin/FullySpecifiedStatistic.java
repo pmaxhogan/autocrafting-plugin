@@ -132,11 +132,16 @@ public class FullySpecifiedStatistic {
   }
 
   enum CustomStatistic{
-    KDR("KDR");
+    KDR("KDR Percent"),
+    PLAYER_KDR("Player KDR Percent");
 
     private final String name;
     CustomStatistic(String name){
       this.name = name;
+    }
+
+    public String getName() {
+      return name;
     }
   }
 
@@ -203,7 +208,12 @@ public class FullySpecifiedStatistic {
 
   String getNiceObjectiveName(){
     Logger logger = Bukkit.getLogger();
-    String thisStatisticName = trackedStatistic.getKey().toString();
+    String thisStatisticName = null;
+
+    if(this.trackedStatistic != null) {
+      thisStatisticName = trackedStatistic.getKey().toString();
+    }
+
     String name = getStatisticName();
     if(name != null){
       thisStatisticName = name;

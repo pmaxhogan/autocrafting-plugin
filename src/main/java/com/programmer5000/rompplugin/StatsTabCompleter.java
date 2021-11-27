@@ -37,9 +37,19 @@ public class StatsTabCompleter implements TabCompleter {
         results.addAll(paramaterizedDisplayTypes.stream().filter(str -> str.startsWith(fragment)).collect(Collectors.toList()));
       }
 
-      results.addAll(StatsBoardManager.getInstance().getPossibleStartingWith(fragment).stream().filter(str -> fragment.contains(":") || !str.contains(":")).map(str -> {
-        String[] split = str.split(" ");
-        return String.join(" ", Arrays.copyOfRange(split, Math.min(split.length, args.length - 2), split.length));
+      results.addAll(StatsBoardManager.getInstance().getPossibleStartingWith(fragment).stream().filter(str -> (fragment.contains(":") || !str.contains(":")) && str.startsWith(fragment)).map(str -> {
+        if(fragment.contains(" ")){
+          return str.substring(Math.min(str.length(), fragment.lastIndexOf(" ") + 1));
+        }else{
+          return str;
+        }
+//        String[] split = str.split(" ");
+//        return String.join(" ", Arrays.copyOfRange(split, Math.min(split.length, args.length - 2), split.length));
+//        if(str.contains(fragment) && fragment.endsWith(" ")){
+//          return str.substring(fragment.length());
+//        }else{
+//          return str;
+//        }
       }).collect(Collectors.toList()));
 
       return results;
