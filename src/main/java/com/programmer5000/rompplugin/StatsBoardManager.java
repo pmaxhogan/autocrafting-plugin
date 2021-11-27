@@ -82,7 +82,7 @@ public class StatsBoardManager {
   public StatsBoard getBoard(String board){
     FullySpecifiedStatistic fullStat = null;
     for(FullySpecifiedStatistic thisFullStat : allPossibleStatistics){
-      if(thisFullStat.getNiceObjectiveName().equals(board)){
+      if(thisFullStat.getNiceObjectiveName().equalsIgnoreCase(board)){
         fullStat = thisFullStat;
         break;
       }
