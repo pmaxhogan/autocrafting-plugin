@@ -1,5 +1,6 @@
 package com.programmer5000.rompplugin;
 
+import com.google.common.math.Stats;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -15,6 +16,7 @@ public class StatsBoardManager {
   private static StatsBoardManager instance = null;
   private final List<FullySpecifiedStatistic> allPossibleStatistics = new ArrayList<>();
   private final HashMap<FullySpecifiedStatistic, StatsBoard> boardMap = new HashMap<>();
+  private final HashMap<FullySpecifiedStatistic.CustomStatistic, StatsBoard> boardMap2 = new HashMap<>();
 
   StatsBoardManager() {
     Logger logger = Bukkit.getLogger();
@@ -60,21 +62,31 @@ public class StatsBoardManager {
   }
 
   public Collection<StatsBoard> getAllBoards(){
-    return boardMap.values();
+    Collection<StatsBoard> values = boardMap.values();
+    values.addAll(boardMap2.values());
+    return values;
   }
 
   public void updateAll(){
     for(StatsBoard board : getAllBoards()){
       board.updateScoresForAllPlayers();
     }
+
+    for(StatsBoard board : getAllBoards()){
+      board.updateScoresForAllPlayers();
+    }
   }
 
   public List<String> getPossibleStartingWith(String fragment){
-    List returnVal = new ArrayList<String>();
+    List<String> returnVal = new ArrayList<>();
     for(FullySpecifiedStatistic thisFullStat : allPossibleStatistics) {
       if(thisFullStat.getNiceObjectiveName().startsWith(fragment)){
         returnVal.add(thisFullStat.getNiceObjectiveName());
       }
+    }
+
+    for(FullySpecifiedStatistic.CustomStatistic stat :FullySpecifiedStatistic.CustomStatistic.values()){
+      returnVal.add(stat.name());
     }
     return returnVal;
   }
@@ -88,9 +100,29 @@ public class StatsBoardManager {
       }
     }
 
-    if(fullStat == null) return null;
+    if(fullStat == null){
+      for(FullySpecifiedStatistic.CustomStatistic stat :FullySpecifiedStatistic.CustomStatistic.values()){
+        if(stat.name().equalsIgnoreCase(board)){
+          return getBoard(stat);
+        }
+      }
 
-    return getBoard(fullStat.trackedStatistic, fullStat.statEntityOrMaterialOrNull);
+      return null;
+    }else {
+      return getBoard(fullStat.trackedStatistic, fullStat.statEntityOrMaterialOrNull);
+    }
+  }
+
+  public StatsBoard getBoard(FullySpecifiedStatistic.CustomStatistic customStat){
+    if(boardMap2.containsKey(customStat)){
+      return boardMap2.get(customStat);
+    }else{
+      StatsBoard board = new StatsBoard(customStat);
+
+      boardMap2.put(customStat, board);
+
+      return board;
+    }
   }
 
   public StatsBoard getBoard(Statistic trackedStatistic, Object statEntityOrMaterialOrNull) {

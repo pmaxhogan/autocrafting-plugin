@@ -12,11 +12,13 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public class FullySpecifiedStatistic {
-  public final Statistic trackedStatistic;
-  public final Object statEntityOrMaterialOrNull;
+  public Statistic trackedStatistic = null;
+  public CustomStatistic customStatistic = null;
+  public Object statEntityOrMaterialOrNull = null;
   private final int hashCode;
 
 
+  @SuppressWarnings("unused")
   enum StatisticsToNames {
     DAMAGE_DEALT,
     DAMAGE_TAKEN,
@@ -129,11 +131,24 @@ public class FullySpecifiedStatistic {
     }
   }
 
+  enum CustomStatistic{
+    KDR("KDR");
+
+    private final String name;
+    CustomStatistic(String name){
+      this.name = name;
+    }
+  }
 
   FullySpecifiedStatistic(Statistic trackedStatistic, Object statEntityOrMaterialOrNull){
     this.trackedStatistic = trackedStatistic;
     this.statEntityOrMaterialOrNull = statEntityOrMaterialOrNull;
     this.hashCode = Objects.hash(trackedStatistic, statEntityOrMaterialOrNull);
+  }
+
+  FullySpecifiedStatistic(CustomStatistic customStat){
+    this.customStatistic = customStat;
+    this.hashCode = Objects.hash(customStat);
   }
 
   public static String toTitleCase(String input) {
@@ -166,16 +181,32 @@ public class FullySpecifiedStatistic {
     }
   }
 
+  private String getStatisticName(){
+    if(this.trackedStatistic == null) {
+      return this.customStatistic.name;
+    }else{
+      if(getStatisticsToNames() != null) {
+        return getStatisticsToNames().name;
+      }else{
+        return null;
+      }
+    }
+  }
+
   public int getDivisionFactor(){
-    return getStatisticsToNames().getDivisionFactor();
+    if(this.trackedStatistic == null) {
+      return 1;
+    }else {
+      return getStatisticsToNames().getDivisionFactor();
+    }
   }
 
   String getNiceObjectiveName(){
     Logger logger = Bukkit.getLogger();
     String thisStatisticName = trackedStatistic.getKey().toString();
-    StatisticsToNames name = getStatisticsToNames();
+    String name = getStatisticName();
     if(name != null){
-      thisStatisticName = name.name;
+      thisStatisticName = name;
     }
 
     if(statEntityOrMaterialOrNull == null){

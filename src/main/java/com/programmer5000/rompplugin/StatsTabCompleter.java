@@ -39,7 +39,7 @@ public class StatsTabCompleter implements TabCompleter {
 
       results.addAll(StatsBoardManager.getInstance().getPossibleStartingWith(fragment).stream().filter(str -> fragment.contains(":") || !str.contains(":")).map(str -> {
         String[] split = str.split(" ");
-        return String.join(" ", Arrays.copyOfRange(split, args.length - 2, split.length));
+        return String.join(" ", Arrays.copyOfRange(split, Math.min(split.length, args.length - 2), split.length));
       }).collect(Collectors.toList()));
 
       return results;

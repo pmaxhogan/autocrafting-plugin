@@ -13,9 +13,10 @@ import java.util.logging.Logger;
 
 public class StatsBoard {
   private final Scoreboard board;
-  private final Statistic trackedStatistic;
-  private final Objective objective;
-  private final FullySpecifiedStatistic fullStat;
+  private Statistic trackedStatistic;
+  private FullySpecifiedStatistic.CustomStatistic customStatistic;
+  private Objective objective;
+  private FullySpecifiedStatistic fullStat;
   private Object statEntityOrMaterialOrNull = null;
 
   StatsBoard(Statistic trackedStatistic, Object statEntityOrMaterialOrNull){
@@ -26,6 +27,20 @@ public class StatsBoard {
     this.statEntityOrMaterialOrNull = statEntityOrMaterialOrNull;
     this.fullStat = new FullySpecifiedStatistic(trackedStatistic, statEntityOrMaterialOrNull);
 
+    init();
+  }
+
+  StatsBoard(FullySpecifiedStatistic.CustomStatistic customStatistic){
+    ScoreboardManager manager = Bukkit.getScoreboardManager();
+    assert manager != null;
+    this.board = manager.getNewScoreboard();
+    this.customStatistic = customStatistic;
+    this.statEntityOrMaterialOrNull = null;
+
+    init();
+  }
+
+  private void init(){
     Logger logger = Bukkit.getLogger();
 
     Random rand = new Random();
@@ -47,12 +62,17 @@ public class StatsBoard {
 
     for (OfflinePlayer pastPlayer : allPlayers) {
       int scoreValue;
-      if(this.statEntityOrMaterialOrNull instanceof Material){
-        scoreValue = pastPlayer.getStatistic(this.trackedStatistic, (Material) statEntityOrMaterialOrNull);
-      } else if(statEntityOrMaterialOrNull instanceof EntityType){
-        scoreValue = pastPlayer.getStatistic(this.trackedStatistic, (EntityType) statEntityOrMaterialOrNull);
-      } else{
-        scoreValue = pastPlayer.getStatistic(this.trackedStatistic);
+
+      if(this.trackedStatistic != null) {
+        if (this.statEntityOrMaterialOrNull instanceof Material) {
+          scoreValue = pastPlayer.getStatistic(this.trackedStatistic, (Material) statEntityOrMaterialOrNull);
+        } else if (statEntityOrMaterialOrNull instanceof EntityType) {
+          scoreValue = pastPlayer.getStatistic(this.trackedStatistic, (EntityType) statEntityOrMaterialOrNull);
+        } else {
+          scoreValue = pastPlayer.getStatistic(this.trackedStatistic);
+        }
+      }else{
+        scoreValue = 666;
       }
 
       String name = pastPlayer.getName();
@@ -60,7 +80,9 @@ public class StatsBoard {
         name = pastPlayer.getUniqueId().toString();
       }
 
-      scoreValue /= this.fullStat.getDivisionFactor();
+      if(this.fullStat != null) {
+        scoreValue /= this.fullStat.getDivisionFactor();
+      }
 
       Score score = objective.getScore(name);
       if(score.isScoreSet() || scoreValue > 0){
@@ -96,10 +118,18 @@ public class StatsBoard {
   }
 
   public int getDivisionFactor(){
-    return fullStat.getDivisionFactor();
+    if(this.fullStat == null) {
+      return 1;
+    } else {
+      return fullStat.getDivisionFactor();
+    }
   }
 
   public String getObjectiveName() {
-    return this.fullStat.getNiceObjectiveName();
+    if(this.fullStat == null) {
+      return this.customStatistic.name();
+    }else{
+      return this.fullStat.getNiceObjectiveName();
+    }
   }
 }
