@@ -132,6 +132,7 @@ public class FullySpecifiedStatistic {
   }
 
   enum CustomStatistic{
+    FALL_FROM_HEIGHT("Max Fall Height"),
     KDR("KDR Percent"),
     PLAYER_KDR("Player KDR Percent");
 

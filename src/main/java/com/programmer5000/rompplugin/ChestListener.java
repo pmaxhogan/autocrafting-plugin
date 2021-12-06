@@ -4,10 +4,10 @@ import java.util.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.*;
@@ -61,6 +61,15 @@ public class ChestListener implements Listener {
 
     if (isChest && ((slotIsContainer && clickedChest && !isOkSlot) || otherInventoryMove)) {
       event.setCancelled(true);
+    }
+  }
+
+  @EventHandler(priority = EventPriority.LOWEST)
+  public void onEntityDamage(final EntityDamageEvent event){
+    if(event.getCause() == EntityDamageEvent.DamageCause.FALL && event.getEntity() instanceof Player) {
+      Player player = (Player) event.getEntity();
+
+      PlayerDataManager.addFallHeight(player, (int) Math.floor((event.getDamage()) + 3));
     }
   }
 

@@ -95,6 +95,9 @@ public class StatsBoard {
             scoreValue = (timesKilledPlayer * 100) / timesKilledByPlayer;
 
             break;
+          case FALL_FROM_HEIGHT:
+            scoreValue = PlayerDataManager.getFallHeight(pastPlayer);
+            break;
         }
       }
 

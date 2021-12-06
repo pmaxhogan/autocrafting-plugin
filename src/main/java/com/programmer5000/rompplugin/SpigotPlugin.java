@@ -59,7 +59,6 @@ public class SpigotPlugin extends JavaPlugin {
         saveConfig();
 
 
-
         instance = this;
 
         shapedRecipeMap = new HashMap();
