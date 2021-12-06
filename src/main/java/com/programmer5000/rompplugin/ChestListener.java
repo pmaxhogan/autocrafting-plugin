@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.*;
 
 class RecipeShape {
@@ -43,6 +44,17 @@ public class ChestListener implements Listener {
   final int[] middleRow = {9, 10, 11};
   final int[] bottomRow = {18, 19, 20};
   final int[] allRows = {0, 1, 2, 9, 10, 11, 18, 19, 20};
+
+
+  @EventHandler(priority = EventPriority.MONITOR)
+  public void onPlayerJoin(final PlayerJoinEvent event){
+    StatsBoard board = PlayerDataManager.getScorebaord(event.getPlayer());
+    if(board != null){
+      board.addPlayer(event.getPlayer());
+    }else{
+      StatsBoard.clearPlayer(event.getPlayer());
+    }
+  }
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onInventoryClick(final InventoryClickEvent event){

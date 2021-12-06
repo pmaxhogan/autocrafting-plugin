@@ -54,7 +54,7 @@ public class StatsBoard {
 //    }
 
     String objectiveName = getObjectiveName();
-    logger.info("Creating new board & registering new objective with key " + objectiveKey + " and name " + objectiveName);
+//    logger.info("Creating new board & registering new objective with key " + objectiveKey + " and name " + objectiveName);
     this.objective = board.registerNewObjective(objectiveKey, "dummy", objectiveName);
     this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
   }
@@ -120,15 +120,19 @@ public class StatsBoard {
   public static void clearPlayer(@org.jetbrains.annotations.NotNull Player player){
     ScoreboardManager manager = Bukkit.getScoreboardManager();
     assert manager != null; // should not be null
+
+    PlayerDataManager.setScoreboard(player, null);
     player.setScoreboard(manager.getNewScoreboard());
   }
 
   public void addPlayer(@org.jetbrains.annotations.NotNull Player player){
     player.setScoreboard(board);
     Bukkit.getLogger().info("Added player " + player.getName() + " to board " + getObjectiveName());
-    player.sendMessage("Added you to the " + getObjectiveName() + " scoreboard.");
+    player.sendMessage("Added you to the " + getObjectiveName() + " scoreboard. (/sidebar clear to clear)");
 
     updateScoresForAllPlayers();
+
+    PlayerDataManager.setScoreboard(player, this);
   }
 
   public Scoreboard getBoard() {

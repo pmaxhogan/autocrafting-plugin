@@ -8,11 +8,29 @@ import org.bukkit.entity.Player;
 public class PlayerDataManager {
 //  static final NamespacedKey fallHeightKey = new NamespacedKey(SpigotPlugin.getInstance(), "max-fall-height");
 
+  public static void setScoreboard(Player player, StatsBoard board) {
+    String searchStr = board == null ? "" : board.getObjectiveName();
 
-  public static void addFallHeight(Player player, int fallHeight){
+    FileConfiguration config = SpigotPlugin.getInstance().getConfig();
+    config.set("playerScoreboard." + player.getUniqueId(), searchStr);
+    SpigotPlugin.getInstance().saveConfig();
+  }
+
+  public static StatsBoard getScorebaord(Player player){
+    FileConfiguration config = SpigotPlugin.getInstance().getConfig();
+    String searchStr = (String) config.get("playerScoreboard." + player.getUniqueId());
+
+    if (searchStr != null) {
+      return StatsBoardManager.getInstance().getBoard(searchStr);
+    }else{
+      return null;
+    }
+  }
+
+    public static void addFallHeight(Player player, int fallHeight){
     if(getFallHeight(player) >= fallHeight) return;
 
-    Bukkit.getLogger().info(player.getDisplayName() + " fell from height " + fallHeight);
+//    Bukkit.getLogger().info(player.getDisplayName() + " fell from height " + fallHeight);
 
 //    player.getPersistentDataContainer().set(fallHeightKey, PersistentDataType.INTEGER, fallHeight);
     FileConfiguration config = SpigotPlugin.getInstance().getConfig();

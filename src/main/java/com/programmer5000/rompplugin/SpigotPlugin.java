@@ -3,6 +3,7 @@ package com.programmer5000.rompplugin;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
@@ -57,6 +58,15 @@ public class SpigotPlugin extends JavaPlugin {
         config.addDefault("enableRecipeEmpty", true);
         config.options().copyDefaults(true);
         saveConfig();
+
+        for(Player player : Bukkit.getOnlinePlayers()){
+            StatsBoard board = PlayerDataManager.getScorebaord(player);
+            if(board != null){
+                board.addPlayer(player);
+            }else{
+                StatsBoard.clearPlayer(player);
+            }
+        }
 
 
         instance = this;
