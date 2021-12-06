@@ -46,6 +46,7 @@ public class ChestListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onInventoryClick(final InventoryClickEvent event){
+    Bukkit.getLogger().info("inventory click event");
     boolean isChest = event.getInventory().getType() == InventoryType.CHEST;
     if(!isChest) return;
     if(!checkInventoryIsSpecialChest(event.getInventory())) return;
@@ -65,6 +66,7 @@ public class ChestListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onInventoryDrag(final InventoryDragEvent event){
+    Bukkit.getLogger().info("inventory drag event");
     boolean isChest = event.getInventory().getType() == InventoryType.CHEST;
     if(!isChest) return;
     if(!checkInventoryIsSpecialChest(event.getInventory())) return;
@@ -96,6 +98,7 @@ public class ChestListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onInventoryMove(final InventoryMoveItemEvent event){
+    Bukkit.getLogger().info("inventory move event");
     Inventory sourceInventory = event.getSource();
     Inventory destInventory = event.getDestination();
 
@@ -111,6 +114,7 @@ public class ChestListener implements Listener {
     if(!chestToHopper && !hopperToChest) return;
 
     if(hopperToChest) {
+      Bukkit.getLogger().info("hopper to chest");
       if(!checkInventoryIsSpecialChest(destInventory)) return;
 
       ItemStack stack = event.getItem().clone();
@@ -143,12 +147,6 @@ public class ChestListener implements Listener {
       } else {
         event.setCancelled(true);
       }
-
-      destInventory.getViewers().forEach(humanEntity -> {
-        if(humanEntity instanceof Player){
-          ((Player) humanEntity).updateInventory();
-        }
-      });
     }
     if(chestToHopper){
       if(!checkInventoryIsSpecialChest(sourceInventory)) return;
@@ -200,6 +198,20 @@ public class ChestListener implements Listener {
         event.setCancelled(true);
       }
     }
+
+//    Bukkit.getLogger().info("number of viewers: " + sourceInventory.getViewers().size() + " " + destInventory.getViewers().size());
+//    sourceInventory.getViewers().forEach(humanEntity -> {
+//      if(humanEntity instanceof Player){
+//        Bukkit.getLogger().info("updating inventory1 for player " + humanEntity.getUniqueId());
+//        ((Player) humanEntity).updateInventory();
+//      }
+//    });
+//    destInventory.getViewers().forEach(humanEntity -> {
+//      if(humanEntity instanceof Player){
+//        Bukkit.getLogger().info("updating inventory2 for player " + humanEntity.getUniqueId());
+//        ((Player) humanEntity).updateInventory();
+//      }
+//    });
   }
 
   private boolean contains(final int[] array, final int key){
