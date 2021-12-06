@@ -28,7 +28,7 @@ public class StatsBoardManager {
             Class<?> eClass = (Class<?>) type.getEntityClass();
             if(eClass != null && Creature.class.isAssignableFrom(eClass) || eClass == Player.class){
               FullySpecifiedStatistic fullStat = new FullySpecifiedStatistic(stat, type);
-              logger.info("Added entity " + fullStat.getNiceObjectiveName());
+//              logger.info("Added entity " + fullStat.getNiceObjectiveName());
               allPossibleStatistics.add(fullStat);
             }
           }

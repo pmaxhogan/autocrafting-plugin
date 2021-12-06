@@ -65,7 +65,7 @@ public class SpigotPlugin extends JavaPlugin {
         shapedRecipeMap = new HashMap();
         shapelessRecipeMap = new HashMap();
 
-        Bukkit.getLogger().info("calculating recipe maps...");
+//        Bukkit.getLogger().info("calculating recipe maps...");
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         while(iterator.hasNext()){
             Recipe recipe = iterator.next();
@@ -81,7 +81,7 @@ public class SpigotPlugin extends JavaPlugin {
             }
         }
 
-        Bukkit.getLogger().info("calculated recipe maps!");
+        Bukkit.getLogger().info("calculated " + shapedRecipeMap.size() + " recipe maps!");
 
         // Don't log enabling, Spigot does that for you automatically!
 

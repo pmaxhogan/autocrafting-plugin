@@ -46,7 +46,7 @@ public class ChestListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   public void onInventoryClick(final InventoryClickEvent event){
-    Bukkit.getLogger().info("inventory click event");
+//    Bukkit.getLogger().info("inventory click event");
     boolean isChest = event.getInventory().getType() == InventoryType.CHEST;
     if(!isChest) return;
     if(!checkInventoryIsSpecialChest(event.getInventory())) return;
@@ -66,7 +66,7 @@ public class ChestListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onInventoryDrag(final InventoryDragEvent event){
-    Bukkit.getLogger().info("inventory drag event");
+//    Bukkit.getLogger().info("inventory drag event");
     boolean isChest = event.getInventory().getType() == InventoryType.CHEST;
     if(!isChest) return;
     if(!checkInventoryIsSpecialChest(event.getInventory())) return;
@@ -98,7 +98,7 @@ public class ChestListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onInventoryMove(final InventoryMoveItemEvent event){
-    Bukkit.getLogger().info("inventory move event");
+//    Bukkit.getLogger().info("inventory move event");
     Inventory sourceInventory = event.getSource();
     Inventory destInventory = event.getDestination();
 
@@ -114,7 +114,7 @@ public class ChestListener implements Listener {
     if(!chestToHopper && !hopperToChest) return;
 
     if(hopperToChest) {
-      Bukkit.getLogger().info("hopper to chest");
+//      Bukkit.getLogger().info("hopper to chest");
       if(!checkInventoryIsSpecialChest(destInventory)) return;
 
       ItemStack stack = event.getItem().clone();
