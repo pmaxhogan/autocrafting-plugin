@@ -76,26 +76,6 @@ public class StatsBoard {
         }
       } else {
         switch (this.customStatistic) {
-          case KDR:
-            int timesKilled = pastPlayer.getStatistic(Statistic.PLAYER_KILLS);
-            for (EntityType type : EntityType.values()) {
-              Class<?> eClass = type.getEntityClass();
-              if (eClass != null && Creature.class.isAssignableFrom(eClass)) {
-                timesKilled += pastPlayer.getStatistic(Statistic.KILL_ENTITY, type);
-              }
-            }
-
-            int timesDied = pastPlayer.getStatistic(Statistic.DEATHS) + 1;
-
-            scoreValue = (timesKilled * 100) / timesDied;
-            break;
-          case PLAYER_KDR:
-            int timesKilledPlayer = pastPlayer.getStatistic(Statistic.PLAYER_KILLS);
-            int timesKilledByPlayer = pastPlayer.getStatistic(Statistic.ENTITY_KILLED_BY, EntityType.PLAYER) + 1;
-
-            scoreValue = (timesKilledPlayer * 100) / timesKilledByPlayer;
-
-            break;
           case FALL_FROM_HEIGHT:
             scoreValue = PlayerDataManager.getFallHeight(pastPlayer);
             break;

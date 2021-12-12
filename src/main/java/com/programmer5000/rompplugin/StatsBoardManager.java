@@ -85,8 +85,6 @@ public class StatsBoardManager {
     for (StatsBoard board : allBoards) {
       board.updateScoresForAllPlayers();
     }
-
-    Bukkit.getLogger().info(allBoards.size() + ": updateAll method took: " + timer.stop());
   }
 
   public List<String> getPossibleStartingWith(String fragment) {
