@@ -21,6 +21,7 @@ public class StatsBoard {
     ScoreboardManager manager = Bukkit.getScoreboardManager();
     assert manager != null;
     this.board = manager.getNewScoreboard();
+    StaticScoreboardManager.getInstance().addToBoard(this.board);
     this.trackedStatistic = trackedStatistic;
     this.statEntityOrMaterialOrNull = statEntityOrMaterialOrNull;
     this.fullStat = new FullySpecifiedStatistic(trackedStatistic, statEntityOrMaterialOrNull);
@@ -32,6 +33,7 @@ public class StatsBoard {
     ScoreboardManager manager = Bukkit.getScoreboardManager();
     assert manager != null;
     this.board = manager.getNewScoreboard();
+    StaticScoreboardManager.getInstance().addToBoard(this.board);
     this.customStatistic = customStatistic;
     this.statEntityOrMaterialOrNull = null;
     this.fullStat = new FullySpecifiedStatistic(customStatistic);
@@ -44,7 +46,9 @@ public class StatsBoard {
     assert manager != null; // should not be null
 
     PlayerDataManager.setScoreboard(player, null);
-    player.setScoreboard(manager.getNewScoreboard());
+    Scoreboard newScoreboard = manager.getNewScoreboard();
+    StaticScoreboardManager.getInstance().addToBoard(newScoreboard);
+    player.setScoreboard(newScoreboard);
   }
 
   private void init() {
