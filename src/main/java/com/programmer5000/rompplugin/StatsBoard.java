@@ -97,7 +97,7 @@ public class StatsBoard {
   public void addPlayer(@org.jetbrains.annotations.NotNull Player player) {
     player.setScoreboard(board);
     Bukkit.getLogger().info("Added player " + player.getName() + " to board " + getObjectiveName());
-    player.sendMessage(ChatColor.GREEN +"Displaying " + ChatColor.WHITE + ChatColor.UNDERLINE + getObjectiveName() + ChatColor.RESET + ChatColor.GREEN +" on your sidebar. (/sidebar clear to clear, /sidebar shuffle to toggle shuffle)");
+    player.sendMessage(ChatColor.GREEN + "Displaying " + ChatColor.WHITE + ChatColor.UNDERLINE + getObjectiveName() + ChatColor.RESET + ChatColor.GREEN +" on your sidebar. (/sidebar clear to clear, /sidebar shuffle to toggle shuffle)");
 
     updateScoresForAllPlayers();
 
