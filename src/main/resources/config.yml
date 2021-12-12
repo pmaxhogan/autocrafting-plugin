@@ -10,5 +10,8 @@ shuffleStatistics:
 # whether to enable scoreboard shuffling by default
 shuffleEnabledByDefault: true
 
+# how often (in minutes) shuffling should happen
+scheduleShuffleInterval: 10
+
 # set this to true to allow hoppers to pull recipe templates out of a chest
 enableRecipeEmpty: false

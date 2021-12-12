@@ -12,12 +12,18 @@ public class FullySpecifiedStatistic {
   public Statistic trackedStatistic = null;
   public CustomStatistic customStatistic = null;
   public Object statEntityOrMaterialOrNull = null;
+  private StatisticsToNames stat = null;
 
 
   FullySpecifiedStatistic(Statistic trackedStatistic, Object statEntityOrMaterialOrNull) {
     this.trackedStatistic = trackedStatistic;
     this.statEntityOrMaterialOrNull = statEntityOrMaterialOrNull;
     this.hashCode = Objects.hash(trackedStatistic, statEntityOrMaterialOrNull);
+
+    try {
+      stat = StatisticsToNames.valueOf(trackedStatistic.toString());
+    } catch (IllegalArgumentException ignored) { // :))
+    }
   }
 
   FullySpecifiedStatistic(CustomStatistic customStat) {
@@ -48,11 +54,7 @@ public class FullySpecifiedStatistic {
   }
 
   private StatisticsToNames getStatisticsToNames() {
-    try {
-      return StatisticsToNames.valueOf(trackedStatistic.toString());
-    } catch (IllegalArgumentException ignored) {
-      return null;
-    }
+    return stat;
   }
 
   private String getStatisticName() {

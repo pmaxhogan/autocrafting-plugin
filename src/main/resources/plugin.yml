@@ -12,5 +12,12 @@ commands:
   sidebar:
     description: Sets which field displays on your sidebar
     usage: /<command> {clear|display|shffle} <Name of board to display>
+  sbar-reload:
+    description: Reloads the config
+    permission: sidebar.reload
+    usage: /<command> {clear|display|shffle} <Name of board to display>
 
-permissions: { }
+permissions:
+  sidebar.reload:
+    permission:
+      default: op

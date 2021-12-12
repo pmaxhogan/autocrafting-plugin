@@ -44,7 +44,7 @@ public class ScoreboardShuffler {
     Random rand = new Random();
     List<StatsBoard> boards = getBoards();
     StatsBoard board = boards.get(rand.nextInt(boards.size()));
-    Bukkit.getLogger().info("Shuffling all...");
+    Bukkit.getLogger().info("Shuffling all scoreboards");
     if (board == shuffledStat && boards.size() > 1) {
       updateShuffledStat();
     } else {

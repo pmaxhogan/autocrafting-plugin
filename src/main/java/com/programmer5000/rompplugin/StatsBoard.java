@@ -1,5 +1,6 @@
 package com.programmer5000.rompplugin;
 
+import com.google.common.base.Stopwatch;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -100,7 +101,6 @@ public class StatsBoard {
             break;
         }
       }
-
       String name = pastPlayer.getName();
       if (name == null) {
         name = pastPlayer.getUniqueId().toString();
@@ -120,7 +120,7 @@ public class StatsBoard {
   public void addPlayer(@org.jetbrains.annotations.NotNull Player player) {
     player.setScoreboard(board);
     Bukkit.getLogger().info("Added player " + player.getName() + " to board " + getObjectiveName());
-    player.sendMessage("Displaying " + getObjectiveName() + " on your sidebar. (/sidebar clear to clear sidebar, /sidebar shuffle to toggle sidebar shuffle)");
+    player.sendMessage("Displaying " + getObjectiveName() + " on your sidebar. (/sidebar clear to clear, /sidebar shuffle to toggle shuffle)");
 
     updateScoresForAllPlayers();
 

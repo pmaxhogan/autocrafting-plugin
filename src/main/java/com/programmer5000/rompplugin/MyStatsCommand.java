@@ -19,6 +19,8 @@ public class MyStatsCommand implements CommandExecutor {
       if (args.length == 1 && args[0].equalsIgnoreCase("clear")) {
         StatsBoard.clearPlayer(player);
 
+        stopShuffling(player);
+
         player.sendMessage("Cleared your scoreboard.");
 
         return true;
@@ -46,12 +48,7 @@ public class MyStatsCommand implements CommandExecutor {
         if (statsBoard == null) {
           player.sendMessage("Could not find scoreboard " + searchStr);
         } else {
-          Boolean shuffledNow = PlayerDataManager.getShuffle(player);
-          if (shuffledNow) {
-            PlayerDataManager.setShuffle(player, false);
-            player.sendMessage("Disabled sidebar shuffling (/sidebar shuffle to reenable)");
-            ScoreboardShuffler.getInstance().removePlayer(player);
-          }
+          stopShuffling(player);
 
           statsBoard.addPlayer(player);
         }
@@ -62,6 +59,15 @@ public class MyStatsCommand implements CommandExecutor {
       }
     } else {
       return false;
+    }
+  }
+
+  private void stopShuffling(Player player) {
+    Boolean shuffledNow = PlayerDataManager.getShuffle(player);
+    if (shuffledNow) {
+      PlayerDataManager.setShuffle(player, false);
+      player.sendMessage("Disabled sidebar shuffling (/sidebar shuffle to reenable)");
+      ScoreboardShuffler.getInstance().removePlayer(player);
     }
   }
 }

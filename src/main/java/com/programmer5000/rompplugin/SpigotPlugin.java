@@ -13,6 +13,7 @@ import java.util.*;
 
 public class SpigotPlugin extends JavaPlugin {
   private static SpigotPlugin instance;
+  private int task = -1;
   private Map<RecipeShape, ShapedRecipe> shapedRecipeMap;
   private Map<List<ItemStack>, ShapelessRecipe> shapelessRecipeMap;
 
@@ -54,7 +55,7 @@ public class SpigotPlugin extends JavaPlugin {
   @Override
   public void onEnable() {
     FileConfiguration config = this.getConfig();
-    config.addDefault("enableRecipeEmpty", true);
+    config.addDefault("enableRecipeEmpty", false);
     config.options().copyDefaults(true);
     saveConfig();
 
@@ -89,14 +90,23 @@ public class SpigotPlugin extends JavaPlugin {
     // Don't log enabling, Spigot does that for you automatically!
 
     // Commands enabled with following method must have entries in plugin.yml
+    Objects.requireNonNull(getCommand("sbar-reload")).setExecutor(new ReloadCommand());
     Objects.requireNonNull(getCommand("sidebar")).setExecutor(new MyStatsCommand());
     Objects.requireNonNull(getCommand("sidebar")).setTabCompleter(new StatsTabCompleter());
 
     getServer().getPluginManager().registerEvents(new ChestListener(), this);
     getServer().getPluginManager().registerEvents(new MotdListener(), this);
 
-    Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> StatsBoardManager.getInstance().updateAll(), 0, 20);// run once a second (every 20 ticks)
+    Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> StatsBoardManager.getInstance().updateAll(), 0, 20 * 15);// run once every 15 seconds
 
-    Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> ScoreboardShuffler.getInstance().shuffleAll(), 0, 20/* * 60 * 10*/);// run once every 10 minutes (20 * 60 * 10 ticks)
+    scheduleShuffleTask();
+  }
+
+  public void scheduleShuffleTask() {
+    if(task != -1){
+      Bukkit.getScheduler().cancelTask(task);
+    }
+
+    task = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> ScoreboardShuffler.getInstance().shuffleAll(), 0, 20 * 60 * this.getConfig().getLong("scheduleShuffleInterval", 10));// run once every n minutes
   }
 }

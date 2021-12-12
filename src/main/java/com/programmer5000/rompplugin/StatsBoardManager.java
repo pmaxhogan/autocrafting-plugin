@@ -1,5 +1,6 @@
 package com.programmer5000.rompplugin;
 
+import com.google.common.base.Stopwatch;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -79,13 +80,13 @@ public class StatsBoardManager {
   }
 
   public void updateAll() {
-    for (StatsBoard board : getAllBoards()) {
+    ArrayList<StatsBoard> allBoards = getAllBoards();
+    Stopwatch timer = Stopwatch.createStarted();
+    for (StatsBoard board : allBoards) {
       board.updateScoresForAllPlayers();
     }
 
-    for (StatsBoard board : getAllBoards()) {
-      board.updateScoresForAllPlayers();
-    }
+    Bukkit.getLogger().info(allBoards.size() + ": updateAll method took: " + timer.stop());
   }
 
   public List<String> getPossibleStartingWith(String fragment) {
