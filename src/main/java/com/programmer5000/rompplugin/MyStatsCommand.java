@@ -18,7 +18,7 @@ public class MyStatsCommand implements CommandExecutor {
 
 
       if (args.length == 1 && args[0].equalsIgnoreCase("clear")) {
-        StatsBoard.clearPlayer(player);
+        StatsBoardManager.getInstance().clearPlayer(player);
 
         stopShuffling(player);
 

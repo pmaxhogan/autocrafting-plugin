@@ -48,7 +48,7 @@ public class ChestListener implements Listener {
       if (board != null) {
         board.addPlayer(player);
       } else {
-        StatsBoard.clearPlayer(player);
+        StatsBoardManager.getInstance().clearPlayer(player);
       }
     }
   }

@@ -19,6 +19,7 @@ public class StatsBoardManager {
   private static StatsBoardManager instance = null;
   private final List<FullySpecifiedStatistic> allPossibleStatistics = new ArrayList<>();
   private final HashMap<FullySpecifiedStatistic, StatsBoard> boardMap = new HashMap<>();
+  private final StatsBoard emptyBoard = new StatsBoard();
   private final HashMap<FullySpecifiedStatistic.CustomStatistic, StatsBoard> boardMap2 = new HashMap<>();
 
   StatsBoardManager() {
@@ -72,6 +73,10 @@ public class StatsBoardManager {
     return instance;
   }
 
+  public void clearPlayer(Player player){
+    emptyBoard.addPlayer(player);
+  }
+
   public ArrayList<StatsBoard> getAllBoards() {
     ArrayList<StatsBoard> values = new ArrayList<>();
     values.addAll(boardMap.values());
@@ -81,7 +86,6 @@ public class StatsBoardManager {
 
   public void updateAll() {
     ArrayList<StatsBoard> allBoards = getAllBoards();
-    Stopwatch timer = Stopwatch.createStarted();
     for (StatsBoard board : allBoards) {
       board.updateScoresForAllPlayers();
     }

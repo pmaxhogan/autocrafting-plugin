@@ -67,7 +67,8 @@ public class ScoreboardShuffler {
 
     for (Player player : players) {
       if (player.isOnline()) {
-        StatsBoard.clearPlayer(player);
+//        TODO: is this needed?
+//        StatsBoard.clearPlayer(player);
         shuffledStat.addPlayer(player);
       }
     }
@@ -78,7 +79,8 @@ public class ScoreboardShuffler {
       players.add(player);
       if (shuffledStat == null) updateShuffledStat();
 
-      StatsBoard.clearPlayer(player);
+//      TODO: is this needed?
+//      StatsBoard.clearPlayer(player);
       shuffledStat.addPlayer(player);
     }
   }
@@ -87,6 +89,6 @@ public class ScoreboardShuffler {
     players.remove(player);
     if (shuffledStat == null) updateShuffledStat();
 
-    StatsBoard.clearPlayer(player);
+    StatsBoardManager.getInstance().clearPlayer(player);
   }
 }

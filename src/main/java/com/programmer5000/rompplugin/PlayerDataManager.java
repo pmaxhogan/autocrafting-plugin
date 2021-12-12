@@ -19,7 +19,12 @@ public class PlayerDataManager {
   }
 
   public static void setScoreboard(Player player, StatsBoard board) {
-    String searchStr = board == null ? "" : board.getObjectiveName();
+    String searchStr ;
+    if(board == null || board.getObjectiveName() == null){
+      searchStr = "";
+    }else{
+      searchStr = board.getObjectiveName();
+    }
 
     FileConfiguration config = SpigotPlugin.getInstance().getConfig();
     config.set("playerScoreboard." + player.getUniqueId(), searchStr);

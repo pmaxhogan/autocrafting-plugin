@@ -1,8 +1,13 @@
 package com.programmer5000.rompplugin;
 
-import com.google.common.base.Stopwatch;
-import org.bukkit.*;
-import org.bukkit.entity.Creature;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
@@ -10,12 +15,26 @@ import org.bukkit.scoreboard.*;
 import java.util.Random;
 
 public class StatsBoard {
-  private final Scoreboard board;
+  private Scoreboard board = null;
   private Statistic trackedStatistic;
   private FullySpecifiedStatistic.CustomStatistic customStatistic;
   private Objective objective;
-  private final FullySpecifiedStatistic fullStat;
-  private final Object statEntityOrMaterialOrNull;
+  private Objective deathsObjective;
+  private Objective healthObjective;
+  private FullySpecifiedStatistic fullStat = null;
+  private Object statEntityOrMaterialOrNull = null;
+
+  StatsBoard(){
+    ScoreboardManager manager = Bukkit.getScoreboardManager();
+    assert manager != null;
+    this.board = manager.getNewScoreboard();
+    StaticScoreboardManager.getInstance().addToBoard(this.board);
+    this.trackedStatistic = null;
+    this.statEntityOrMaterialOrNull = null;
+    this.fullStat = null;
+
+    init();
+  }
 
   StatsBoard(Statistic trackedStatistic, Object statEntityOrMaterialOrNull) {
     ScoreboardManager manager = Bukkit.getScoreboardManager();
@@ -41,6 +60,7 @@ public class StatsBoard {
     init();
   }
 
+  @Deprecated
   public static void clearPlayer(@org.jetbrains.annotations.NotNull Player player) {
     ScoreboardManager manager = Bukkit.getScoreboardManager();
     assert manager != null; // should not be null
@@ -56,9 +76,17 @@ public class StatsBoard {
     String objectiveKey = String.valueOf(rand.nextInt(Integer.MAX_VALUE));
 
     String objectiveName = getObjectiveName();
-//    logger.info("Creating new board & registering new objective with key " + objectiveKey + " and name " + objectiveName);
-    this.objective = board.registerNewObjective(objectiveKey, "dummy", objectiveName);
-    this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+    //    logger.info("Creating new board & registering new objective with key " + objectiveKey + " and name " + objectiveName);
+    if(objectiveName != null) {
+      this.objective = board.registerNewObjective(objectiveKey, "dummy", objectiveName);
+      this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+    }
+
+    this.deathsObjective = board.registerNewObjective(String.valueOf(rand.nextInt(Integer.MAX_VALUE)), "dummy", "Deaths");
+    this.deathsObjective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+
+    this.healthObjective = board.registerNewObjective(String.valueOf(rand.nextInt(Integer.MAX_VALUE)), "dummy", "Health");
+    this.healthObjective.setDisplaySlot(DisplaySlot.BELOW_NAME);
   }
 
   public boolean updateScoresForAllPlayers() {
@@ -66,38 +94,49 @@ public class StatsBoard {
     OfflinePlayer[] allPlayers = Bukkit.getOfflinePlayers();
 
     for (OfflinePlayer pastPlayer : allPlayers) {
-      int scoreValue = 0;
-
-      if (this.trackedStatistic != null) {
-        if (this.statEntityOrMaterialOrNull instanceof Material) {
-          scoreValue = pastPlayer.getStatistic(this.trackedStatistic, (Material) statEntityOrMaterialOrNull);
-        } else if (statEntityOrMaterialOrNull instanceof EntityType) {
-          scoreValue = pastPlayer.getStatistic(this.trackedStatistic, (EntityType) statEntityOrMaterialOrNull);
-        } else {
-          scoreValue = pastPlayer.getStatistic(this.trackedStatistic);
-        }
-      } else {
-        switch (this.customStatistic) {
-          case FALL_FROM_HEIGHT:
-            scoreValue = PlayerDataManager.getFallHeight(pastPlayer);
-            break;
-        }
-      }
       String name = pastPlayer.getName();
       if (name == null) {
         name = pastPlayer.getUniqueId().toString();
       }
 
-      if (this.fullStat != null) {
-        scoreValue /= this.fullStat.getDivisionFactor();
+      if(this.objective != null) {
+        int scoreValue = 0;
+
+        if (this.trackedStatistic != null) {
+          if (this.statEntityOrMaterialOrNull instanceof Material) {
+            scoreValue = pastPlayer.getStatistic(this.trackedStatistic, (Material) statEntityOrMaterialOrNull);
+          } else if (statEntityOrMaterialOrNull instanceof EntityType) {
+            scoreValue = pastPlayer.getStatistic(this.trackedStatistic, (EntityType) statEntityOrMaterialOrNull);
+          } else {
+            scoreValue = pastPlayer.getStatistic(this.trackedStatistic);
+          }
+        } else if (this.customStatistic != null) {
+          switch (this.customStatistic) {
+            case FALL_FROM_HEIGHT:
+              scoreValue = PlayerDataManager.getFallHeight(pastPlayer);
+              break;
+          }
+        }
+
+        if (this.fullStat != null) {
+          scoreValue /= this.fullStat.getDivisionFactor();
+        }
+
+        Score score = objective.getScore(name);
+        if (score.isScoreSet() || scoreValue > 0) {
+          score.setScore(scoreValue);
+        }
+
+        if (scoreValue > 0) positiveValues = true;
       }
 
-      Score score = objective.getScore(name);
-      if (score.isScoreSet() || scoreValue > 0) {
-        score.setScore(scoreValue);
-      }
+      Score deathsScore = this.deathsObjective.getScore(name);
+      deathsScore.setScore(pastPlayer.getStatistic(Statistic.DEATHS));
 
-      if(scoreValue > 0) positiveValues = true;
+      if(pastPlayer.getPlayer() != null) {
+        Score healthScore = this.healthObjective.getScore(name);
+        healthScore.setScore((int) pastPlayer.getPlayer().getHealth());
+      }
     }
 
     return positiveValues;
@@ -134,10 +173,12 @@ public class StatsBoard {
   }
 
   public String getObjectiveName() {
-    if (this.fullStat == null) {
-      return this.customStatistic.name();
-    } else {
+    if (this.fullStat != null) {
       return this.fullStat.getNiceObjectiveName();
+    } else if(this.customStatistic != null) {
+      return this.customStatistic.name();
+    }else{
+      return null;
     }
   }
 }
