@@ -11,6 +11,6 @@ main: ${mainClass}
 commands:
     sidebar:
         description: Sets which field displays on your sidebar
-        usage: /<command> {clear|display} <Name of board to display>
+        usage: /<command> {clear|display|shffle} <Name of board to display>
 
 permissions: {}

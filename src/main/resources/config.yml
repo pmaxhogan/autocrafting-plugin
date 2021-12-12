@@ -1,2 +1,14 @@
+shuffleStatistics:
+  - "Player KDR Percent"
+  - "KDR Percent"
+  - "Max Fall Height"
+  - "Minutes Played"
+  - "Distance Walked"
+  - "Mob Kills"
+  - "Damage Taken"
+
+# whether to enable scoreboard shuffling by default
+shuffleEnabledByDefault: true
+
 # set this to true to allow hoppers to pull recipe templates out of a chest
-enableRecipeEmpty: true
+enableRecipeEmpty: false

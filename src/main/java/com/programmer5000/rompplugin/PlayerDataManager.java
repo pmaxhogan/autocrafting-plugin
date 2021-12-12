@@ -1,12 +1,22 @@
 package com.programmer5000.rompplugin;
 
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class PlayerDataManager {
 //  static final NamespacedKey fallHeightKey = new NamespacedKey(SpigotPlugin.getInstance(), "max-fall-height");
+
+  public static Boolean getShuffle(Player player) {
+    FileConfiguration config = SpigotPlugin.getInstance().getConfig();
+    return (Boolean) config.get("playerShuffle." + player.getUniqueId(), config.getBoolean("shuffleEnabledByDefault"));
+  }
+
+  public static void setShuffle(Player player, Boolean shuffle){
+    FileConfiguration config = SpigotPlugin.getInstance().getConfig();
+    config.set("playerShuffle." + player.getUniqueId(), shuffle);
+    SpigotPlugin.getInstance().saveConfig();
+  }
 
   public static void setScoreboard(Player player, StatsBoard board) {
     String searchStr = board == null ? "" : board.getObjectiveName();

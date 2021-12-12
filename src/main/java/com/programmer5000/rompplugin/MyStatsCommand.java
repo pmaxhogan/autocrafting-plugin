@@ -28,22 +28,37 @@ public class MyStatsCommand implements CommandExecutor {
         player.sendMessage("Cleared your scoreboard.");
 
         return true;
+      }else if(args.length == 1 && args[0].equalsIgnoreCase("shuffle")){
+        Boolean shuffledNow = PlayerDataManager.getShuffle(player);
+        PlayerDataManager.setShuffle(player, !shuffledNow);
+
+        player.sendMessage(!shuffledNow ? "Enabled sidebar shuffling" : "Disabled sidebar shuffling");
+
+        if(!shuffledNow){
+          ScoreboardShuffler.getInstance().addPlayer(player);
+        }else{
+          ScoreboardShuffler.getInstance().removePlayer(player);
+        }
+
+        return true;
       }else if(args.length > 1 && args[0].equalsIgnoreCase("display")) {
         String searchStr = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         if(searchStr.startsWith("\"") && searchStr.endsWith("\"")){
           searchStr = searchStr.substring(1, searchStr.length() - 1);
         }
 
-//      Statistic stat = Statistic.ENTITY_KILLED_BY;
-//      Object statEntityOrMaterialOrNull = EntityType.ZOMBIE;
-//
-//      StatsBoard statsBoard = StatsBoardManager.getInstance().getBoard(stat, statEntityOrMaterialOrNull);
-
         StatsBoard statsBoard = StatsBoardManager.getInstance().getBoard(searchStr);
 
         if(statsBoard == null){
           player.sendMessage("Could not find scoreboard " + searchStr);
         }else {
+          Boolean shuffledNow = PlayerDataManager.getShuffle(player);
+          if(shuffledNow){
+            PlayerDataManager.setShuffle(player, false);
+            player.sendMessage("Disabled sidebar shuffling (/sidebar shuffle to reenable)");
+            ScoreboardShuffler.getInstance().removePlayer(player);
+          }
+
           statsBoard.addPlayer(player);
         }
 

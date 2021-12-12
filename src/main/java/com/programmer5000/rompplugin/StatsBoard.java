@@ -128,7 +128,7 @@ public class StatsBoard {
   public void addPlayer(@org.jetbrains.annotations.NotNull Player player){
     player.setScoreboard(board);
     Bukkit.getLogger().info("Added player " + player.getName() + " to board " + getObjectiveName());
-    player.sendMessage("Added you to the " + getObjectiveName() + " scoreboard. (/sidebar clear to clear)");
+    player.sendMessage("Displaying " + getObjectiveName() + " on your sidebar. (/sidebar clear to clear sidebar, /sidebar shuffle to toggle sidebar shuffle)");
 
     updateScoresForAllPlayers();
 

@@ -48,11 +48,21 @@ public class ChestListener implements Listener {
 
   @EventHandler(priority = EventPriority.MONITOR)
   public void onPlayerJoin(final PlayerJoinEvent event){
-    StatsBoard board = PlayerDataManager.getScorebaord(event.getPlayer());
+    Player player = event.getPlayer();
+    handlePlayerJoin(player);
+  }
+
+  public static void handlePlayerJoin(Player player) {
+    StatsBoard board = PlayerDataManager.getScorebaord(player);
     if(board != null){
-      board.addPlayer(event.getPlayer());
+      board.addPlayer(player);
     }else{
-      StatsBoard.clearPlayer(event.getPlayer());
+      StatsBoard.clearPlayer(player);
+    }
+
+    Boolean shuffledNow = PlayerDataManager.getShuffle(player);
+    if(shuffledNow){
+      ScoreboardShuffler.getInstance().addPlayer(player);
     }
   }
 

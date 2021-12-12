@@ -60,12 +60,7 @@ public class SpigotPlugin extends JavaPlugin {
         saveConfig();
 
         for(Player player : Bukkit.getOnlinePlayers()){
-            StatsBoard board = PlayerDataManager.getScorebaord(player);
-            if(board != null){
-                board.addPlayer(player);
-            }else{
-                StatsBoard.clearPlayer(player);
-            }
+            ChestListener.handlePlayerJoin(player);
         }
 
 
@@ -107,5 +102,12 @@ public class SpigotPlugin extends JavaPlugin {
                 StatsBoardManager.getInstance().updateAll();
             }
         }, 0, 20);// run once a second (every 20 ticks)
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+            @Override
+            public void run() {
+                ScoreboardShuffler.getInstance().shuffleAll();
+            }
+        }, 0, 20/* * 60 * 10*/);// run once every 10 minutes (20 * 60 * 10 ticks)
     }
 }

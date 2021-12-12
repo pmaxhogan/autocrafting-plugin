@@ -13,6 +13,7 @@ public class StatsTabCompleter implements TabCompleter {
   public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
     ArrayList<String> commandsList = new ArrayList<>();
     commandsList.add("display");
+    commandsList.add("shuffle");
     commandsList.add("clear");
 
     ArrayList<String> paramaterizedDisplayTypes = new ArrayList<>();
