@@ -10,17 +10,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
 import java.util.Random;
-import java.util.logging.Logger;
 
 public class StatsBoard {
   private final Scoreboard board;
   private Statistic trackedStatistic;
   private FullySpecifiedStatistic.CustomStatistic customStatistic;
   private Objective objective;
-  private FullySpecifiedStatistic fullStat;
-  private Object statEntityOrMaterialOrNull = null;
+  private final FullySpecifiedStatistic fullStat;
+  private final Object statEntityOrMaterialOrNull;
 
-  StatsBoard(Statistic trackedStatistic, Object statEntityOrMaterialOrNull){
+  StatsBoard(Statistic trackedStatistic, Object statEntityOrMaterialOrNull) {
     ScoreboardManager manager = Bukkit.getScoreboardManager();
     assert manager != null;
     this.board = manager.getNewScoreboard();
@@ -31,7 +30,7 @@ public class StatsBoard {
     init();
   }
 
-  StatsBoard(FullySpecifiedStatistic.CustomStatistic customStatistic){
+  StatsBoard(FullySpecifiedStatistic.CustomStatistic customStatistic) {
     ScoreboardManager manager = Bukkit.getScoreboardManager();
     assert manager != null;
     this.board = manager.getNewScoreboard();
@@ -42,16 +41,17 @@ public class StatsBoard {
     init();
   }
 
-  private void init(){
-    Logger logger = Bukkit.getLogger();
+  public static void clearPlayer(@org.jetbrains.annotations.NotNull Player player) {
+    ScoreboardManager manager = Bukkit.getScoreboardManager();
+    assert manager != null; // should not be null
 
+    PlayerDataManager.setScoreboard(player, null);
+    player.setScoreboard(manager.getNewScoreboard());
+  }
+
+  private void init() {
     Random rand = new Random();
     String objectiveKey = String.valueOf(rand.nextInt(Integer.MAX_VALUE));
-//    String objectiveKey = trackedStatistic.toString();
-//
-//    if(statEntityOrMaterialOrNull != null){
-//      objectiveKey += "_" + statEntityOrMaterialOrNull.toString();
-//    }
 
     String objectiveName = getObjectiveName();
 //    logger.info("Creating new board & registering new objective with key " + objectiveKey + " and name " + objectiveName);
@@ -65,7 +65,7 @@ public class StatsBoard {
     for (OfflinePlayer pastPlayer : allPlayers) {
       int scoreValue = 0;
 
-      if(this.trackedStatistic != null) {
+      if (this.trackedStatistic != null) {
         if (this.statEntityOrMaterialOrNull instanceof Material) {
           scoreValue = pastPlayer.getStatistic(this.trackedStatistic, (Material) statEntityOrMaterialOrNull);
         } else if (statEntityOrMaterialOrNull instanceof EntityType) {
@@ -73,12 +73,12 @@ public class StatsBoard {
         } else {
           scoreValue = pastPlayer.getStatistic(this.trackedStatistic);
         }
-      }else{
-        switch(this.customStatistic){
+      } else {
+        switch (this.customStatistic) {
           case KDR:
             int timesKilled = pastPlayer.getStatistic(Statistic.PLAYER_KILLS);
-            for(EntityType type : EntityType.values()) {
-              Class<?> eClass = (Class<?>) type.getEntityClass();
+            for (EntityType type : EntityType.values()) {
+              Class<?> eClass = type.getEntityClass();
               if (eClass != null && Creature.class.isAssignableFrom(eClass)) {
                 timesKilled += pastPlayer.getStatistic(Statistic.KILL_ENTITY, type);
               }
@@ -102,30 +102,22 @@ public class StatsBoard {
       }
 
       String name = pastPlayer.getName();
-      if(name == null){
+      if (name == null) {
         name = pastPlayer.getUniqueId().toString();
       }
 
-      if(this.fullStat != null) {
+      if (this.fullStat != null) {
         scoreValue /= this.fullStat.getDivisionFactor();
       }
 
       Score score = objective.getScore(name);
-      if(score.isScoreSet() || scoreValue > 0){
+      if (score.isScoreSet() || scoreValue > 0) {
         score.setScore(scoreValue);
       }
     }
   }
 
-  public static void clearPlayer(@org.jetbrains.annotations.NotNull Player player){
-    ScoreboardManager manager = Bukkit.getScoreboardManager();
-    assert manager != null; // should not be null
-
-    PlayerDataManager.setScoreboard(player, null);
-    player.setScoreboard(manager.getNewScoreboard());
-  }
-
-  public void addPlayer(@org.jetbrains.annotations.NotNull Player player){
+  public void addPlayer(@org.jetbrains.annotations.NotNull Player player) {
     player.setScoreboard(board);
     Bukkit.getLogger().info("Added player " + player.getName() + " to board " + getObjectiveName());
     player.sendMessage("Displaying " + getObjectiveName() + " on your sidebar. (/sidebar clear to clear sidebar, /sidebar shuffle to toggle sidebar shuffle)");
@@ -147,8 +139,8 @@ public class StatsBoard {
     return statEntityOrMaterialOrNull;
   }
 
-  public int getDivisionFactor(){
-    if(this.fullStat == null) {
+  public int getDivisionFactor() {
+    if (this.fullStat == null) {
       return 1;
     } else {
       return fullStat.getDivisionFactor();
@@ -156,9 +148,9 @@ public class StatsBoard {
   }
 
   public String getObjectiveName() {
-    if(this.fullStat == null) {
+    if (this.fullStat == null) {
       return this.customStatistic.name();
-    }else{
+    } else {
       return this.fullStat.getNiceObjectiveName();
     }
   }

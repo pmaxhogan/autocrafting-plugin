@@ -1,22 +1,126 @@
 package com.programmer5000.rompplugin;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 public class FullySpecifiedStatistic {
+  private final int hashCode;
   public Statistic trackedStatistic = null;
   public CustomStatistic customStatistic = null;
   public Object statEntityOrMaterialOrNull = null;
-  private final int hashCode;
 
+
+  FullySpecifiedStatistic(Statistic trackedStatistic, Object statEntityOrMaterialOrNull) {
+    this.trackedStatistic = trackedStatistic;
+    this.statEntityOrMaterialOrNull = statEntityOrMaterialOrNull;
+    this.hashCode = Objects.hash(trackedStatistic, statEntityOrMaterialOrNull);
+  }
+
+  FullySpecifiedStatistic(CustomStatistic customStat) {
+    this.customStatistic = customStat;
+    this.hashCode = Objects.hash(customStat);
+  }
+
+  public static String toTitleCase(String input) {
+    StringBuilder titleCase = new StringBuilder(input.length());
+    boolean nextTitleCase = true;
+
+    for (char c : input.toCharArray()) {
+      if (Character.isSpaceChar(c)) {
+        nextTitleCase = true;
+      } else if (nextTitleCase) {
+        c = Character.toTitleCase(c);
+        nextTitleCase = false;
+      }
+
+      titleCase.append(c);
+    }
+
+    return titleCase.toString();
+  }
+
+  private static String keyToString(String key) {
+    return toTitleCase(key.replaceAll("_", " ").toLowerCase(Locale.ROOT));
+  }
+
+  private StatisticsToNames getStatisticsToNames() {
+    try {
+      return StatisticsToNames.valueOf(trackedStatistic.toString());
+    } catch (IllegalArgumentException ignored) {
+      return null;
+    }
+  }
+
+  private String getStatisticName() {
+    if (this.trackedStatistic == null) {
+      return this.customStatistic.name;
+    } else {
+      if (getStatisticsToNames() != null) {
+        return getStatisticsToNames().name;
+      } else {
+        return null;
+      }
+    }
+  }
+
+  public int getDivisionFactor() {
+    if (this.trackedStatistic == null) {
+      return 1;
+    } else if(getStatisticsToNames() != null) {
+      return getStatisticsToNames().getDivisionFactor();
+    }else{
+      return 1;
+    }
+  }
+
+  String getNiceObjectiveName() {
+    String thisStatisticName = null;
+
+    if (this.trackedStatistic != null) {
+      thisStatisticName = trackedStatistic.getKey().toString();
+    }
+
+    String name = getStatisticName();
+    if (name != null) {
+      thisStatisticName = name;
+    }
+
+    if (statEntityOrMaterialOrNull == null) {
+      return thisStatisticName;
+    } else {
+      if (statEntityOrMaterialOrNull instanceof Material) {
+        Material mat = (Material) statEntityOrMaterialOrNull;
+
+
+        return thisStatisticName + ": " + keyToString(mat.getKey().getKey());
+      } else if (statEntityOrMaterialOrNull instanceof EntityType) {
+        EntityType type = (EntityType) statEntityOrMaterialOrNull;
+
+        return thisStatisticName + ": " + keyToString(type.getKey().getKey());
+      } else {
+        return thisStatisticName + " " + statEntityOrMaterialOrNull;
+      }
+    }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    FullySpecifiedStatistic that = (FullySpecifiedStatistic) o;
+    return trackedStatistic == that.trackedStatistic && statEntityOrMaterialOrNull == that.statEntityOrMaterialOrNull;
+  }
+
+  @Override
+  public int hashCode() {
+    return this.hashCode;
+  }
 
   @SuppressWarnings("unused")
   enum StatisticsToNames {
@@ -106,22 +210,22 @@ public class FullySpecifiedStatistic {
     private final String name;
     private final int divisionFactor;
 
-    private StatisticsToNames() {
+    StatisticsToNames() {
       this.name = keyToString(this.toString());
       this.divisionFactor = 1;
     }
 
-    private StatisticsToNames(String name) {
+    StatisticsToNames(String name) {
       this.name = name;
       this.divisionFactor = 1;
     }
 
-    private StatisticsToNames(int divisionFactor) {
+    StatisticsToNames(int divisionFactor) {
       this.name = keyToString(this.toString());
       this.divisionFactor = divisionFactor;
     }
 
-    private StatisticsToNames(String name, int divisionFactor) {
+    StatisticsToNames(String name, int divisionFactor) {
       this.name = name;
       this.divisionFactor = divisionFactor;
     }
@@ -131,125 +235,19 @@ public class FullySpecifiedStatistic {
     }
   }
 
-  enum CustomStatistic{
+  enum CustomStatistic {
     FALL_FROM_HEIGHT("Max Fall Height"),
     KDR("KDR Percent"),
     PLAYER_KDR("Player KDR Percent");
 
     private final String name;
-    CustomStatistic(String name){
+
+    CustomStatistic(String name) {
       this.name = name;
     }
 
     public String getName() {
       return name;
     }
-  }
-
-  FullySpecifiedStatistic(Statistic trackedStatistic, Object statEntityOrMaterialOrNull){
-    this.trackedStatistic = trackedStatistic;
-    this.statEntityOrMaterialOrNull = statEntityOrMaterialOrNull;
-    this.hashCode = Objects.hash(trackedStatistic, statEntityOrMaterialOrNull);
-  }
-
-  FullySpecifiedStatistic(CustomStatistic customStat){
-    this.customStatistic = customStat;
-    this.hashCode = Objects.hash(customStat);
-  }
-
-  public static String toTitleCase(String input) {
-    StringBuilder titleCase = new StringBuilder(input.length());
-    boolean nextTitleCase = true;
-
-    for (char c : input.toCharArray()) {
-      if (Character.isSpaceChar(c)) {
-        nextTitleCase = true;
-      } else if (nextTitleCase) {
-        c = Character.toTitleCase(c);
-        nextTitleCase = false;
-      }
-
-      titleCase.append(c);
-    }
-
-    return titleCase.toString();
-  }
-
-  private static String keyToString(String key){
-    return toTitleCase(key.replaceAll("_", " ").toLowerCase(Locale.ROOT));
-  }
-
-  private StatisticsToNames getStatisticsToNames(){
-    try {
-      return StatisticsToNames.valueOf(trackedStatistic.toString());
-    }catch(IllegalArgumentException ignored){
-      return null;
-    }
-  }
-
-  private String getStatisticName(){
-    if(this.trackedStatistic == null) {
-      return this.customStatistic.name;
-    }else{
-      if(getStatisticsToNames() != null) {
-        return getStatisticsToNames().name;
-      }else{
-        return null;
-      }
-    }
-  }
-
-  public int getDivisionFactor(){
-    if(this.trackedStatistic == null) {
-      return 1;
-    }else {
-      return getStatisticsToNames().getDivisionFactor();
-    }
-  }
-
-  String getNiceObjectiveName(){
-    Logger logger = Bukkit.getLogger();
-    String thisStatisticName = null;
-
-    if(this.trackedStatistic != null) {
-      thisStatisticName = trackedStatistic.getKey().toString();
-    }
-
-    String name = getStatisticName();
-    if(name != null){
-      thisStatisticName = name;
-    }
-
-    if(statEntityOrMaterialOrNull == null){
-      return thisStatisticName;
-    }else{
-      if (statEntityOrMaterialOrNull instanceof Material) {
-        Material mat = (Material) statEntityOrMaterialOrNull;
-
-
-        return thisStatisticName + ": " + keyToString(mat.getKey().getKey());
-      }else if (statEntityOrMaterialOrNull instanceof EntityType) {
-        EntityType type = (EntityType) statEntityOrMaterialOrNull;
-
-        return thisStatisticName + ": " + keyToString(type.getKey().getKey());
-      } else {
-        return thisStatisticName + " " + statEntityOrMaterialOrNull;
-      }
-    }
-  }
-
-  @Override
-  public boolean equals(Object o){
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
-    FullySpecifiedStatistic that = (FullySpecifiedStatistic) o;
-    return trackedStatistic == that.trackedStatistic && statEntityOrMaterialOrNull == that.statEntityOrMaterialOrNull;
-  }
-
-  @Override
-  public int hashCode() {
-    return this.hashCode;
   }
 }

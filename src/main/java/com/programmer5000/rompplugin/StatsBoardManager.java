@@ -1,14 +1,16 @@
 package com.programmer5000.rompplugin;
 
-import com.google.common.math.Stats;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Creature;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -21,12 +23,12 @@ public class StatsBoardManager {
   StatsBoardManager() {
     Logger logger = Bukkit.getLogger();
 
-    for(Statistic stat : Statistic.values()) {
-      switch(stat.getType()) {
+    for (Statistic stat : Statistic.values()) {
+      switch (stat.getType()) {
         case ENTITY:// kill, killed by
-          for(EntityType type : EntityType.values()){
-            Class<?> eClass = (Class<?>) type.getEntityClass();
-            if(eClass != null && Creature.class.isAssignableFrom(eClass) || eClass == Player.class){
+          for (EntityType type : EntityType.values()) {
+            Class<?> eClass = type.getEntityClass();
+            if (eClass != null && Creature.class.isAssignableFrom(eClass) || eClass == Player.class) {
               FullySpecifiedStatistic fullStat = new FullySpecifiedStatistic(stat, type);
 //              logger.info("Added entity " + fullStat.getNiceObjectiveName());
               allPossibleStatistics.add(fullStat);
@@ -37,14 +39,14 @@ public class StatsBoardManager {
         case ITEM:// drop, pickup, use, break, craft
         case BLOCK: // mine
           List<Material> allBlocks;
-          if(stat.getType() == Statistic.Type.BLOCK){
+          if (stat.getType() == Statistic.Type.BLOCK) {
             allBlocks = Arrays.stream(Material.values()).filter(Material::isBlock).collect(Collectors.toList());
-          }else{
+          } else {
             allBlocks = Arrays.stream(Material.values()).collect(Collectors.toList());
           }
 
 
-          for(Material block : allBlocks){
+          for (Material block : allBlocks) {
             FullySpecifiedStatistic fullStat = new FullySpecifiedStatistic(stat, block);
 //            logger.info("Added " + fullStat.getNiceObjectiveName());
             allPossibleStatistics.add(fullStat);
@@ -61,63 +63,71 @@ public class StatsBoardManager {
     logger.info("Loaded " + allPossibleStatistics.size() + " possible statistics");
   }
 
-  public ArrayList<StatsBoard> getAllBoards(){
-    ArrayList<StatsBoard> values = new ArrayList<StatsBoard>();
+  public static StatsBoardManager getInstance() {
+    if (instance == null) {
+      instance = new StatsBoardManager();
+    }
+
+    return instance;
+  }
+
+  public ArrayList<StatsBoard> getAllBoards() {
+    ArrayList<StatsBoard> values = new ArrayList<>();
     values.addAll(boardMap.values());
     values.addAll(boardMap2.values());
     return values;
   }
 
-  public void updateAll(){
-    for(StatsBoard board : getAllBoards()){
+  public void updateAll() {
+    for (StatsBoard board : getAllBoards()) {
       board.updateScoresForAllPlayers();
     }
 
-    for(StatsBoard board : getAllBoards()){
+    for (StatsBoard board : getAllBoards()) {
       board.updateScoresForAllPlayers();
     }
   }
 
-  public List<String> getPossibleStartingWith(String fragment){
+  public List<String> getPossibleStartingWith(String fragment) {
     List<String> returnVal = new ArrayList<>();
-    for(FullySpecifiedStatistic thisFullStat : allPossibleStatistics) {
-      if(thisFullStat.getNiceObjectiveName().startsWith(fragment)){
+    for (FullySpecifiedStatistic thisFullStat : allPossibleStatistics) {
+      if (thisFullStat.getNiceObjectiveName().startsWith(fragment)) {
         returnVal.add(thisFullStat.getNiceObjectiveName());
       }
     }
 
-    for(FullySpecifiedStatistic.CustomStatistic stat :FullySpecifiedStatistic.CustomStatistic.values()){
+    for (FullySpecifiedStatistic.CustomStatistic stat : FullySpecifiedStatistic.CustomStatistic.values()) {
       returnVal.add(stat.getName());
     }
     return returnVal;
   }
 
-  public StatsBoard getBoard(String board){
+  public StatsBoard getBoard(String board) {
     FullySpecifiedStatistic fullStat = null;
-    for(FullySpecifiedStatistic thisFullStat : allPossibleStatistics){
-      if(thisFullStat.getNiceObjectiveName().equalsIgnoreCase(board)){
+    for (FullySpecifiedStatistic thisFullStat : allPossibleStatistics) {
+      if (thisFullStat.getNiceObjectiveName().equalsIgnoreCase(board)) {
         fullStat = thisFullStat;
         break;
       }
     }
 
-    if(fullStat == null){
-      for(FullySpecifiedStatistic.CustomStatistic stat :FullySpecifiedStatistic.CustomStatistic.values()){
-        if(stat.getName().equalsIgnoreCase(board)){
+    if (fullStat == null) {
+      for (FullySpecifiedStatistic.CustomStatistic stat : FullySpecifiedStatistic.CustomStatistic.values()) {
+        if (stat.getName().equalsIgnoreCase(board)) {
           return getBoard(stat);
         }
       }
 
       return null;
-    }else {
+    } else {
       return getBoard(fullStat.trackedStatistic, fullStat.statEntityOrMaterialOrNull);
     }
   }
 
-  public StatsBoard getBoard(FullySpecifiedStatistic.CustomStatistic customStat){
-    if(boardMap2.containsKey(customStat)){
+  public StatsBoard getBoard(FullySpecifiedStatistic.CustomStatistic customStat) {
+    if (boardMap2.containsKey(customStat)) {
       return boardMap2.get(customStat);
-    }else{
+    } else {
       StatsBoard board = new StatsBoard(customStat);
 
       boardMap2.put(customStat, board);
@@ -128,9 +138,9 @@ public class StatsBoardManager {
 
   public StatsBoard getBoard(Statistic trackedStatistic, Object statEntityOrMaterialOrNull) {
     FullySpecifiedStatistic stat = new FullySpecifiedStatistic(trackedStatistic, statEntityOrMaterialOrNull);
-    if(boardMap.containsKey(stat)){
+    if (boardMap.containsKey(stat)) {
       return boardMap.get(stat);
-    }else{
+    } else {
       StatsBoard board = new StatsBoard(trackedStatistic, statEntityOrMaterialOrNull);
 
       boardMap.put(stat, board);
@@ -138,13 +148,5 @@ public class StatsBoardManager {
       return board;
     }
 
-  }
-
-  public static StatsBoardManager getInstance(){
-    if(instance == null) {
-      instance = new StatsBoardManager();
-    }
-
-    return instance;
   }
 }
