@@ -1,6 +1,7 @@
 package com.programmer5000.rompplugin;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -144,8 +145,31 @@ public class StatsBoard {
 
   public void addPlayer(@org.jetbrains.annotations.NotNull Player player) {
     player.setScoreboard(board);
-    Bukkit.getLogger().info("Added player " + player.getName() + " to board " + getObjectiveName());
-    player.sendMessage(ChatColor.GREEN + "Displaying " + ChatColor.WHITE + ChatColor.UNDERLINE + getObjectiveName() + ChatColor.RESET + ChatColor.GREEN +" on your sidebar. (/sidebar clear to clear, /sidebar shuffle to toggle shuffle)");
+
+    if(this.objective != null) {
+      Bukkit.getLogger().info("Added player " + player.getName() + " to board " + getObjectiveName());
+
+      TextComponent clearCommand = new TextComponent("/sidebar clear");
+      clearCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sidebar clear"));
+
+      TextComponent shuffleCommand = new TextComponent("/sidebar shuffle");
+      shuffleCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sidebar shuffle"));
+
+      TextComponent displayCommand = new TextComponent("/sidebar display");
+      displayCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sidebar display "));
+
+      BaseComponent[] component = new ComponentBuilder("Displaying ").color(ChatColor.GREEN)
+          .append(getObjectiveName()).color(ChatColor.WHITE).bold(true)
+          .append(" on your sidebar. ( ").color(ChatColor.GREEN).bold(false)
+          .append(clearCommand).color(ChatColor.AQUA).underlined(true)
+          .append(" to clear, ").color(ChatColor.GREEN).underlined(false)
+          .append(shuffleCommand).color(ChatColor.AQUA).underlined(true)
+          .append(" to toggle shuffle, ").color(ChatColor.GREEN).underlined(false)
+          .append(displayCommand).color(ChatColor.AQUA).underlined(true)
+          .append(" to display something specific) ").color(ChatColor.GREEN).underlined(false).create();
+      player.spigot().sendMessage(component);
+//      player.sendMessage(ChatColor.GREEN + "Displaying " + ChatColor.WHITE + ChatColor.UNDERLINE + getObjectiveName() + ChatColor.RESET + ChatColor.GREEN + " on your sidebar. (/sidebar clear to clear, /sidebar shuffle to toggle shuffle, /sidebar display to display something specific)");
+    }
 
     updateScoresForAllPlayers();
 
