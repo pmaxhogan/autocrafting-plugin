@@ -40,16 +40,26 @@ public class ScoreboardShuffler {
     return statsBoardList;
   }
 
-  private void updateShuffledStat() {
+  private void updateShuffledStat(int attempts) {
     Random rand = new Random();
     List<StatsBoard> boards = getBoards();
     StatsBoard board = boards.get(rand.nextInt(boards.size()));
+    boolean hadPositiveValues = board.updateScoresForAllPlayers();
     Bukkit.getLogger().info("Shuffling all scoreboards");
-    if (board == shuffledStat && boards.size() > 1) {
-      updateShuffledStat();
+
+    if(attempts >= 10){
+      Bukkit.getLogger().severe("Could not find a nonzero scoreboard! Please configure something better...");
+    }
+
+    if ((!hadPositiveValues || board == shuffledStat) && boards.size() > 1 && attempts < 10) {
+      updateShuffledStat(attempts + 1);
     } else {
       shuffledStat = board;
     }
+  }
+
+  private void updateShuffledStat() {
+    updateShuffledStat(0);
   }
 
   public void shuffleAll() {

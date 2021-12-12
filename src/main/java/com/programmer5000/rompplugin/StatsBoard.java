@@ -57,7 +57,8 @@ public class StatsBoard {
     this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
   }
 
-  public void updateScoresForAllPlayers() {
+  public boolean updateScoresForAllPlayers() {
+    boolean positiveValues = false;
     OfflinePlayer[] allPlayers = Bukkit.getOfflinePlayers();
 
     for (OfflinePlayer pastPlayer : allPlayers) {
@@ -91,7 +92,11 @@ public class StatsBoard {
       if (score.isScoreSet() || scoreValue > 0) {
         score.setScore(scoreValue);
       }
+
+      if(scoreValue > 0) positiveValues = true;
     }
+
+    return positiveValues;
   }
 
   public void addPlayer(@org.jetbrains.annotations.NotNull Player player) {
