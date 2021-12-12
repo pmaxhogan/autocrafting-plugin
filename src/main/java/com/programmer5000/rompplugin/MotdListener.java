@@ -1,5 +1,6 @@
 package com.programmer5000.rompplugin;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,7 +32,7 @@ public class MotdListener implements Listener {
       event.setMotd(motdBase + "\n\u00A7f" + secondLine);
     } catch (FileNotFoundException e) {
       String errorStr = "Could not find file!\nAdd motds.txt to ./plugins/" + SpigotPlugin.getInstance().getDataFolder().getName();
-      System.out.println(errorStr + e);
+      Bukkit.getLogger().info(errorStr + e);
       event.setMotd(errorStr);
     }
   }
