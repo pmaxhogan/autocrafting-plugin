@@ -1,10 +1,8 @@
 package com.programmer5000.rompplugin;
 
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -151,16 +149,19 @@ public class StatsBoard {
 
       TextComponent clearCommand = new TextComponent("/sidebar clear");
       clearCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sidebar clear"));
+      clearCommand.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Click to run command")));
 
       TextComponent shuffleCommand = new TextComponent("/sidebar shuffle");
       shuffleCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sidebar shuffle"));
+      shuffleCommand.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Click to run command")));
 
       TextComponent displayCommand = new TextComponent("/sidebar display");
       displayCommand.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/sidebar display "));
+      displayCommand.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Click to type command")));
 
       BaseComponent[] component = new ComponentBuilder("Displaying ").color(ChatColor.GREEN)
           .append(getObjectiveName()).color(ChatColor.WHITE).bold(true)
-          .append(" on your sidebar. ( ").color(ChatColor.GREEN).bold(false)
+          .append(" on your sidebar. (").color(ChatColor.GREEN).bold(false)
           .append(clearCommand).color(ChatColor.AQUA).underlined(true)
           .append(" to clear, ").color(ChatColor.GREEN).underlined(false)
           .append(shuffleCommand).color(ChatColor.AQUA).underlined(true)

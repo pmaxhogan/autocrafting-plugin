@@ -1,5 +1,7 @@
 package com.programmer5000.rompplugin;
 
+import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -68,7 +70,17 @@ public class MyStatsCommand implements CommandExecutor {
     Boolean shuffledNow = PlayerDataManager.getShuffle(player);
     if (shuffledNow) {
       PlayerDataManager.setShuffle(player, false);
-      player.sendMessage(ChatColor.GREEN + "Disabled sidebar shuffling (/sidebar shuffle to reenable)");
+
+      TextComponent shuffleCommand = new TextComponent("/sidebar shuffle");
+      shuffleCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sidebar shuffle"));
+      shuffleCommand.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Click to run command")));
+
+      BaseComponent[] component = new ComponentBuilder("Disabled sidebar shuffling (").color(net.md_5.bungee.api.ChatColor.GREEN)
+          .append(shuffleCommand).color(net.md_5.bungee.api.ChatColor.AQUA).underlined(true)
+          .append(" to reenable)").color(net.md_5.bungee.api.ChatColor.GREEN).underlined(false).create();
+
+      player.spigot().sendMessage(component);
+
       ScoreboardShuffler.getInstance().removePlayer(player);
     }
   }
