@@ -15,9 +15,16 @@ commands:
   sbar-reload:
     description: Reloads the config
     permission: sidebar.reload
-    usage: /<command> {clear|display|shffle} <Name of board to display>
+    usage: /<command>
+  sbar-reshuffle:
+    description: Reshuffles the sidebar
+    permission: sidebar.reshuffle
+    usage: /<command>
 
 permissions:
   sidebar.reload:
+    permission:
+      default: op
+  sidebar.reshuffle:
     permission:
       default: op

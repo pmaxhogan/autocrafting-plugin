@@ -91,6 +91,7 @@ public class SpigotPlugin extends JavaPlugin {
 
     // Commands enabled with following method must have entries in plugin.yml
     Objects.requireNonNull(getCommand("sbar-reload")).setExecutor(new ReloadCommand());
+    Objects.requireNonNull(getCommand("sbar-reshuffle")).setExecutor(new ReshuffleCommand());
     Objects.requireNonNull(getCommand("sidebar")).setExecutor(new MyStatsCommand());
     Objects.requireNonNull(getCommand("sidebar")).setTabCompleter(new StatsTabCompleter());
 

@@ -1,5 +1,6 @@
 package com.programmer5000.rompplugin;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
@@ -39,16 +40,16 @@ public class ChestListener implements Listener {
   final int[] allRows = {0, 1, 2, 9, 10, 11, 18, 19, 20};
 
   public static void handlePlayerJoin(Player player) {
-    StatsBoard board = PlayerDataManager.getScorebaord(player);
-    if (board != null) {
-      board.addPlayer(player);
-    } else {
-      StatsBoard.clearPlayer(player);
-    }
-
     Boolean shuffledNow = PlayerDataManager.getShuffle(player);
     if (shuffledNow) {
       ScoreboardShuffler.getInstance().addPlayer(player);
+    }else{
+      StatsBoard board = PlayerDataManager.getScorebaord(player);
+      if (board != null) {
+        board.addPlayer(player);
+      } else {
+        StatsBoard.clearPlayer(player);
+      }
     }
   }
 

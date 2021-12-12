@@ -1,10 +1,7 @@
 package com.programmer5000.rompplugin;
 
 import com.google.common.base.Stopwatch;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Statistic;
+import org.bukkit.*;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -100,7 +97,7 @@ public class StatsBoard {
   public void addPlayer(@org.jetbrains.annotations.NotNull Player player) {
     player.setScoreboard(board);
     Bukkit.getLogger().info("Added player " + player.getName() + " to board " + getObjectiveName());
-    player.sendMessage("Displaying " + getObjectiveName() + " on your sidebar. (/sidebar clear to clear, /sidebar shuffle to toggle shuffle)");
+    player.sendMessage(ChatColor.GREEN +"Displaying " + ChatColor.WHITE + ChatColor.UNDERLINE + getObjectiveName() + ChatColor.RESET + ChatColor.GREEN +" on your sidebar. (/sidebar clear to clear, /sidebar shuffle to toggle shuffle)");
 
     updateScoresForAllPlayers();
 

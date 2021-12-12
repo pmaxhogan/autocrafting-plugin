@@ -1,5 +1,6 @@
 package com.programmer5000.rompplugin;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,20 +22,21 @@ public class MyStatsCommand implements CommandExecutor {
 
         stopShuffling(player);
 
-        player.sendMessage("Cleared your scoreboard.");
+        player.sendMessage(ChatColor.GREEN + "Cleared your scoreboard.");
 
         return true;
       } else if (args.length == 1 && args[0].equalsIgnoreCase("shuffle")) {
         Boolean shuffledNow = PlayerDataManager.getShuffle(player);
         PlayerDataManager.setShuffle(player, !shuffledNow);
 
-        player.sendMessage(!shuffledNow ? "Enabled sidebar shuffling" : "Disabled sidebar shuffling");
-
         if (!shuffledNow) {
           ScoreboardShuffler.getInstance().addPlayer(player);
         } else {
           ScoreboardShuffler.getInstance().removePlayer(player);
         }
+
+
+        player.sendMessage(!shuffledNow ? ChatColor.GREEN + "Enabled sidebar shuffling" : ChatColor.GREEN + "Disabled sidebar shuffling");
 
         return true;
       } else if (args.length > 1 && args[0].equalsIgnoreCase("display")) {
@@ -46,7 +48,7 @@ public class MyStatsCommand implements CommandExecutor {
         StatsBoard statsBoard = StatsBoardManager.getInstance().getBoard(searchStr);
 
         if (statsBoard == null) {
-          player.sendMessage("Could not find scoreboard " + searchStr);
+          player.sendMessage(ChatColor.RED + "Could not find scoreboard " + searchStr);
         } else {
           stopShuffling(player);
 
@@ -66,7 +68,7 @@ public class MyStatsCommand implements CommandExecutor {
     Boolean shuffledNow = PlayerDataManager.getShuffle(player);
     if (shuffledNow) {
       PlayerDataManager.setShuffle(player, false);
-      player.sendMessage("Disabled sidebar shuffling (/sidebar shuffle to reenable)");
+      player.sendMessage(ChatColor.GREEN + "Disabled sidebar shuffling (/sidebar shuffle to reenable)");
       ScoreboardShuffler.getInstance().removePlayer(player);
     }
   }

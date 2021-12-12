@@ -6,14 +6,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-public class ReloadCommand implements CommandExecutor {
+public class ReshuffleCommand implements CommandExecutor {
   @Override
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-    SpigotPlugin.getInstance().reloadConfig();
+    ScoreboardShuffler.getInstance().shuffleAll();
 
-    SpigotPlugin.getInstance().scheduleShuffleTask();
-
-    sender.sendMessage(ChatColor.GREEN + "Reloaded config.");
+    sender.sendMessage(ChatColor.GREEN + "Shuffled sidebar.");
 
     return true;
   }

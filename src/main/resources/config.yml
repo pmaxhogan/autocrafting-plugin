@@ -1,10 +1,11 @@
 shuffleStatistics:
-  - "Player KDR Percent"
-  - "KDR Percent"
   - "Max Fall Height"
   - "Minutes Played"
   - "Distance Walked"
+  - "Bells Rung"
+  - "Distance Sneaked"
   - "Mob Kills"
+  - "Damage Dealt"
   - "Damage Taken"
 
 # whether to enable scoreboard shuffling by default
