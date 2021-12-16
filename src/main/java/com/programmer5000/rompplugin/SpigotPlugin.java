@@ -1,6 +1,7 @@
 package com.programmer5000.rompplugin;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -59,7 +60,7 @@ public class SpigotPlugin extends JavaPlugin {
     config.options().copyDefaults(true);
     saveConfig();
 
-    for (Player player : Bukkit.getOnlinePlayers()) {
+    /*for (Player player : Bukkit.getOnlinePlayers()) {
       ChestListener.handlePlayerJoin(player);
     }
 
@@ -100,7 +101,27 @@ public class SpigotPlugin extends JavaPlugin {
 
     Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> StatsBoardManager.getInstance().updateAll(), 0, 20 * 15);// run once every 15 seconds
 
-    scheduleShuffleTask();
+    scheduleShuffleTask();*/
+
+
+
+    Bukkit.getScheduler().runTask(this, () -> {
+      ConsoleCommandSender console = getServer().getConsoleSender();
+      Bukkit.dispatchCommand(console, "minecraft:seed");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome minecraft:mushroom_fields");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome badlands");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome minecraft:dark_forest");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome minecraft:birch_forest");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome minecraft:old_growth_birch_forest");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome jungle");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome desert");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome jagged_peaks");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome stony_peaks");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome frozen_peaks");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome plains");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome forest");
+      Bukkit.getServer().dispatchCommand(console, "minecraft:locatebiome beach");
+    });
   }
 
   public void scheduleShuffleTask() {
