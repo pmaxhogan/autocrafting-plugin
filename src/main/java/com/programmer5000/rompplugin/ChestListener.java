@@ -10,7 +10,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -79,7 +81,12 @@ public class ChestListener implements Listener {
     }
   }
 
-  @EventHandler(priority = EventPriority.LOWEST)
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onPlayerExpChange(final PlayerLevelChangeEvent event){
+    PlayerDataManager.setXPLevels(event.getPlayer(), event.getPlayer().getLevel());
+  }
+
+  @EventHandler(priority = EventPriority.MONITOR)
   public void onEntityDamage(final EntityDamageEvent event) {
     if (event.getCause() == EntityDamageEvent.DamageCause.FALL && event.getEntity() instanceof Player) {
       Player player = (Player) event.getEntity();
@@ -185,7 +192,7 @@ public class ChestListener implements Listener {
           thisItem = thisItem.clone();
           boolean isAir = thisItem.getType() == Material.AIR;
 
-          boolean lastItem = thisItem.getAmount() == 1 && !SpigotPlugin.getInstance().getConfig().getBoolean("enableRecipeEmpty");
+          boolean lastItem = thisItem.getAmount() == 1 && !RompPlugin.getInstance().getConfig().getBoolean("enableRecipeEmpty");
 
           if (lastItem && !isAir && pos != 0) {
             event.setCancelled(true);
@@ -203,8 +210,8 @@ public class ChestListener implements Listener {
       }
 
       RecipeShape shape = new RecipeShape(stack);
-      ShapedRecipe shapedCrafted = SpigotPlugin.getInstance().getShapedRecipeMap().get(shape);
-      ShapelessRecipe shapelessCrafted = SpigotPlugin.getInstance().getShapelessRecipeMap().get(stackList);
+      ShapedRecipe shapedCrafted = RompPlugin.getInstance().getShapedRecipeMap().get(shape);
+      ShapelessRecipe shapelessCrafted = RompPlugin.getInstance().getShapelessRecipeMap().get(stackList);
 
       ItemStack outItem = null;
       if (shapelessCrafted != null) outItem = shapelessCrafted.getResult();

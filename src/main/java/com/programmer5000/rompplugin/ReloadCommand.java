@@ -9,9 +9,9 @@ import org.jetbrains.annotations.NotNull;
 public class ReloadCommand implements CommandExecutor {
   @Override
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-    SpigotPlugin.getInstance().reloadConfig();
+    RompPlugin.getInstance().reloadConfig();
 
-    SpigotPlugin.getInstance().scheduleShuffleTask();
+    RompPlugin.getInstance().scheduleShuffleTask();
 
     sender.sendMessage(ChatColor.GREEN + "Reloaded config.");
 

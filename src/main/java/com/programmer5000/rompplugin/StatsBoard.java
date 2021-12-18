@@ -111,6 +111,9 @@ public class StatsBoard {
           }
         } else if (this.customStatistic != null) {
           switch (this.customStatistic) {
+            case LEVELS:
+              scoreValue = PlayerDataManager.getXPLevels(pastPlayer);
+              break;
             case FALL_FROM_HEIGHT:
               scoreValue = PlayerDataManager.getFallHeight(pastPlayer);
               break;

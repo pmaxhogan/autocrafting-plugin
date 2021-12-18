@@ -11,13 +11,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
-public class SpigotPlugin extends JavaPlugin {
-  private static SpigotPlugin instance;
+public class RompPlugin extends JavaPlugin {
+  private static RompPlugin instance;
   private int task = -1;
   private Map<RecipeShape, ShapedRecipe> shapedRecipeMap;
   private Map<List<ItemStack>, ShapelessRecipe> shapelessRecipeMap;
 
-  public static SpigotPlugin getInstance() {
+  public static RompPlugin getInstance() {
     return instance;
   }
 

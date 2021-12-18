@@ -24,7 +24,7 @@ public class ScoreboardShuffler {
   public List<StatsBoard> getBoards() {
     List<StatsBoard> statsBoardList = new ArrayList<>();
 
-    FileConfiguration config = SpigotPlugin.getInstance().getConfig();
+    FileConfiguration config = RompPlugin.getInstance().getConfig();
     List<String> stringList = config.getStringList("shuffleStatistics");
 
     for (String boardName : stringList) {

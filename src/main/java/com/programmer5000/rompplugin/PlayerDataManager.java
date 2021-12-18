@@ -8,14 +8,14 @@ public class PlayerDataManager {
 //  static final NamespacedKey fallHeightKey = new NamespacedKey(SpigotPlugin.getInstance(), "max-fall-height");
 
   public static Boolean getShuffle(Player player) {
-    FileConfiguration config = SpigotPlugin.getInstance().getConfig();
+    FileConfiguration config = RompPlugin.getInstance().getConfig();
     return (Boolean) config.get("playerShuffle." + player.getUniqueId(), config.getBoolean("shuffleEnabledByDefault"));
   }
 
   public static void setShuffle(Player player, Boolean shuffle) {
-    FileConfiguration config = SpigotPlugin.getInstance().getConfig();
+    FileConfiguration config = RompPlugin.getInstance().getConfig();
     config.set("playerShuffle." + player.getUniqueId(), shuffle);
-    SpigotPlugin.getInstance().saveConfig();
+    RompPlugin.getInstance().saveConfig();
   }
 
   public static void setScoreboard(Player player, StatsBoard board) {
@@ -26,13 +26,13 @@ public class PlayerDataManager {
       searchStr = board.getObjectiveName();
     }
 
-    FileConfiguration config = SpigotPlugin.getInstance().getConfig();
+    FileConfiguration config = RompPlugin.getInstance().getConfig();
     config.set("playerScoreboard." + player.getUniqueId(), searchStr);
-    SpigotPlugin.getInstance().saveConfig();
+    RompPlugin.getInstance().saveConfig();
   }
 
   public static StatsBoard getScorebaord(Player player) {
-    FileConfiguration config = SpigotPlugin.getInstance().getConfig();
+    FileConfiguration config = RompPlugin.getInstance().getConfig();
     String searchStr = (String) config.get("playerScoreboard." + player.getUniqueId());
 
     if (searchStr != null) {
@@ -45,14 +45,26 @@ public class PlayerDataManager {
   public static void addFallHeight(Player player, int fallHeight) {
     if (getFallHeight(player) >= fallHeight) return;
 
-    FileConfiguration config = SpigotPlugin.getInstance().getConfig();
+    FileConfiguration config = RompPlugin.getInstance().getConfig();
     config.set("playerFallHeight." + player.getUniqueId(), fallHeight);
-    SpigotPlugin.getInstance().saveConfig();
+    RompPlugin.getInstance().saveConfig();
   }
 
 
   public static int getFallHeight(OfflinePlayer player) {
-    FileConfiguration config = SpigotPlugin.getInstance().getConfig();
+    FileConfiguration config = RompPlugin.getInstance().getConfig();
     return (int) config.get("playerFallHeight." + player.getUniqueId(), 0);
+  }
+
+  public static void setXPLevels(Player player, int levels) {
+    FileConfiguration config = RompPlugin.getInstance().getConfig();
+    config.set("playerXPLevels." + player.getUniqueId(), levels);
+    RompPlugin.getInstance().saveConfig();
+  }
+
+
+  public static int getXPLevels(OfflinePlayer player) {
+    FileConfiguration config = RompPlugin.getInstance().getConfig();
+    return (int) config.get("playerXPLevels." + player.getUniqueId(), 0);
   }
 }

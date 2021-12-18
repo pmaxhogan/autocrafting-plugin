@@ -238,6 +238,7 @@ public class FullySpecifiedStatistic {
   }
 
   enum CustomStatistic {
+    LEVELS("XP Levels"),
     FALL_FROM_HEIGHT("Max Fall Height");
 
     private final String name;
